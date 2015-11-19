@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="assignmet2_introsdeUNITN">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/Examples/src"/>
+        <property name="context-root" value="assignmet2_introsdeUNITN"/>
+        <property name="java-output-path" value="/assignmet2_introsdeUNITN/bin"/>
+    </wb-module>
+</project-modules>
