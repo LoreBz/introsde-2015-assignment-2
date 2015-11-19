@@ -1,0 +1,9 @@
+{
+  "name": "IntroSDE LoreBz assig2",
+  "description": "CRUD REST with Persistence",
+  "repository": "https://github.com/LoreBz/assignmet2_introsdeUNITN.git",
+  "image": "heroku/java",
+  "env": {
+    "BUILDPACK_URL": "https://github.com/IntroSDE/heroku-buildpack-ant.git"
+  } 
+}
