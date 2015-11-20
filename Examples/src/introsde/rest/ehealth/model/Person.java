@@ -73,7 +73,7 @@ public class Person implements Serializable {
 	// add below all the getters and setters of all the private attributes
 
 	// getters
-	@XmlTransient
+	@XmlElement(name="personID")
 	public int getIdPerson() {
 		return idPerson;
 	}

@@ -38,8 +38,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 
 public class MyClient {
-	int first_person_id;
-	int last_person_id;
+	static int first_person_id;
+	static int last_person_id;
 
 	public static void main(String[] args) throws IOException, JAXBException,
 			SAXException, TransformerException, ParserConfigurationException,
@@ -91,9 +91,14 @@ public class MyClient {
 		for (int i = 0; i < fn_children.getLength(); i++) {
 			Node item = fn_children.item(i);
 			if (!(item.getNodeName() == "#text")) {
-				if (item.getNodeName().equals("firstname")) {
-					System.out.println(item.getNodeName() + ": "
-							+ item.getTextContent());
+				// if (item.getNodeName().equals("firstname")) {
+				System.out.println(item.getNodeName() + ": "
+						+ item.getTextContent());
+				// }
+				if (item.getNodeName().equals("personID")) {
+					System.out.println("personID=" + item.getTextContent()
+							+ " found!");
+					first_person_id = Integer.parseInt(item.getTextContent());
 				}
 			}
 		}
@@ -108,7 +113,7 @@ public class MyClient {
 		// }
 		// }
 		Node last_node = nodes.item(nodes.getLength() - 1);
-		//comment to push
+		// comment to push
 		counterPerson = MyClient.countSubStringOccur(resp, "<person");
 		if (counterPerson < 3) {
 			result = "ERROR (less than 3 persons)";
