@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -21,8 +22,16 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.google.gson.GsonBuilder;
@@ -33,15 +42,15 @@ public class MyClient {
 	int last_person_id;
 
 	public static void main(String[] args) throws IOException, JAXBException,
-			SAXException, TransformerException, ParserConfigurationException {
-		// ClientConfig clientConfig = new ClientConfig();
-		// Client client = ClientBuilder.newClient(clientConfig);
-		// WebTarget service = client.target(getBaseURI());
+			SAXException, TransformerException, ParserConfigurationException,
+			XPathExpressionException {
 		request1();
+
 	}
 
 	private static void request1() throws IOException, JAXBException,
-			SAXException, TransformerException, ParserConfigurationException {
+			SAXException, TransformerException, ParserConfigurationException,
+			XPathExpressionException {
 		System.out.println(getBaseURI());
 		String url = "";
 		URL obj = null;
@@ -68,6 +77,38 @@ public class MyClient {
 				+ "Content-type: " + contentType);
 		resp = MyClient.getConnectionOutputXML(con);
 
+		InputSource is = new InputSource();
+		is.setCharacterStream(new StringReader(resp));
+
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		Document doc = dBuilder.parse(is);
+		NodeList nodes = doc.getElementsByTagName("person");
+
+		Node first_node = nodes.item(0);
+
+		NodeList fn_children = first_node.getChildNodes();
+		for (int i = 0; i < fn_children.getLength(); i++) {
+			Node item = fn_children.item(i);
+			if (!(item.getNodeName() == "#text")) {
+				if (item.getNodeName().equals("firstname")) {
+					System.out.println(item.getNodeName() + ": "
+							+ item.getTextContent());
+				}
+			}
+		}
+		// for (int i = 0; i < fn_children.getLength(); i++) {
+		// if (fn_children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+		// Element el = (Element) fn_children.item(i);
+		// if (el.getNodeName().contains("person")) {
+		// System.out.println(el.getLocalName() + " "
+		// + el.getTextContent());
+		// }
+
+		// }
+		// }
+		Node last_node = nodes.item(nodes.getLength() - 1);
+		//comment to push
 		counterPerson = MyClient.countSubStringOccur(resp, "<person");
 		if (counterPerson < 3) {
 			result = "ERROR (less than 3 persons)";
@@ -141,7 +182,7 @@ public class MyClient {
 		Document doc = dBuilder.parse("out.xml");
 		TransformerFactory tf = TransformerFactory.newInstance();
 		Transformer transformer = tf.newTransformer();
-		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+		// transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
 		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
@@ -188,5 +229,21 @@ public class MyClient {
 			}
 		}
 		return count;
+	}
+
+	private static void printNode(Node node) throws XPathExpressionException {
+		XPathFactory factory = XPathFactory.newInstance();
+		XPath xpath = factory.newXPath();
+		System.out.println(node.getNodeName());
+		NodeList childNodes = node.getChildNodes();
+		XPathExpression expr = xpath.compile("/*");
+		NodeList evaluate = (NodeList) expr.evaluate(node, XPathConstants.NODE);
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node item = childNodes.item(i);
+			if (!(item.getNodeName() == "#text")) {
+				System.out.println(item.getNodeName() + ": "
+						+ item.getTextContent());
+			}
+		}
 	}
 }
