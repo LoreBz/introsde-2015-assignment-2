@@ -10,9 +10,6 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.DocumentBuilder;
@@ -25,7 +22,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.glassfish.jersey.client.ClientConfig;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -33,17 +29,19 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 
 public class MyClient {
-	public static void main(String[] args)
-			throws IOException, JAXBException, SAXException, TransformerException, ParserConfigurationException {
-		ClientConfig clientConfig = new ClientConfig();
-		Client client = ClientBuilder.newClient(clientConfig);
-		WebTarget service = client.target(getBaseURI());
-		
+	int first_person_id;
+	int last_person_id;
+
+	public static void main(String[] args) throws IOException, JAXBException,
+			SAXException, TransformerException, ParserConfigurationException {
+		// ClientConfig clientConfig = new ClientConfig();
+		// Client client = ClientBuilder.newClient(clientConfig);
+		// WebTarget service = client.target(getBaseURI());
 		request1();
 	}
 
-	private static void request1()
-			throws IOException, JAXBException, SAXException, TransformerException, ParserConfigurationException {
+	private static void request1() throws IOException, JAXBException,
+			SAXException, TransformerException, ParserConfigurationException {
 		System.out.println(getBaseURI());
 		String url = "";
 		URL obj = null;
@@ -66,7 +64,8 @@ public class MyClient {
 		contentType = "application/xml";
 		con.setRequestProperty("Content-Type", contentType);
 
-		System.out.println("Request #1: GET " + url + " Accept: " + accept + "Content-type: " + contentType);
+		System.out.println("Request #1: GET " + url + " Accept: " + accept
+				+ "Content-type: " + contentType);
 		resp = MyClient.getConnectionOutputXML(con);
 
 		counterPerson = MyClient.countSubStringOccur(resp, "<person");
@@ -92,7 +91,8 @@ public class MyClient {
 		contentType = "application/json";
 		con.setRequestProperty("Content-Type", contentType);
 
-		System.out.println("Request #1: GET " + url + " Accept: " + accept + "Content-type: " + contentType);
+		System.out.println("Request #1: GET " + url + " Accept: " + accept
+				+ "Content-type: " + contentType);
 		// responseCode = con.getResponseCode();
 		// System.out.println("Response Code : " + responseCode);
 
@@ -110,18 +110,22 @@ public class MyClient {
 		System.out.println(resp);
 	}
 
-	private static void request2()
-			throws IOException, JAXBException, SAXException, TransformerException, ParserConfigurationException {
-		//to do
-	}
+	// private static void request2() throws IOException, JAXBException,
+	// SAXException, TransformerException, ParserConfigurationException {
+	// // to do
+	// }
+
 	private static URI getBaseURI() {
-		return UriBuilder.fromUri("http://lorebzassignment2.herokuapp.com/sdelab").build();
+		return UriBuilder.fromUri(
+				"http://lorebzassignment2.herokuapp.com/sdelab").build();
 	}
 
 	private static String getConnectionOutputXML(HttpURLConnection con)
-			throws IOException, TransformerException, ParserConfigurationException, SAXException {
+			throws IOException, TransformerException,
+			ParserConfigurationException, SAXException {
 		PrintWriter writer = new PrintWriter("out.xml", "UTF-8");
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				con.getInputStream()));
 		String inputLine;
 		StringBuffer response = new StringBuffer();
 
@@ -141,17 +145,21 @@ public class MyClient {
 		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+		transformer.setOutputProperty(
+				"{http://xml.apache.org/xslt}indent-amount", "4");
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		transformer.transform(new DOMSource(doc), new StreamResult(new OutputStreamWriter(outputStream, "UTF-8")));
+		transformer.transform(new DOMSource(doc), new StreamResult(
+				new OutputStreamWriter(outputStream, "UTF-8")));
 
 		return outputStream.toString();
 	}
 
 	private static String getConnectionOutputJSON(HttpURLConnection con)
-			throws IOException, TransformerException, ParserConfigurationException, SAXException {
+			throws IOException, TransformerException,
+			ParserConfigurationException, SAXException {
 		PrintWriter writer = new PrintWriter("out.json", "UTF-8");
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				con.getInputStream()));
 		String inputLine;
 		StringBuffer response = new StringBuffer();
 

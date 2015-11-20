@@ -1,11 +1,11 @@
 package introsde.rest.ehealth.model;
 
 import introsde.rest.ehealth.dao.LifeCoachDao;
-import introsde.rest.ehealth.model.MeasureDefinition;
 
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -15,17 +15,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import javax.persistence.OneToOne;
 
 /**
  * The persistent class for the "LifeStatus" database table.
  * 
  */
 @Entity
+@Cacheable(false)
 @Table(name = "LifeStatus")
 @NamedQuery(name = "LifeStatus.findAll", query = "SELECT l FROM LifeStatus l")
 @XmlRootElement(name="Measure")

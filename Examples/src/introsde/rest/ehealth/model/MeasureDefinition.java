@@ -5,6 +5,7 @@ import introsde.rest.ehealth.dao.LifeCoachDao;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -23,6 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * 
  */
 @Entity
+@Cacheable(false)
 @Table(name = "MeasureDefinition")
 @NamedQuery(name = "MeasureDefinition.findAll", query = "SELECT m FROM MeasureDefinition m")
 @XmlRootElement

@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,6 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 @Entity  // indicates that this class is an entity to persist in DB
+@Cacheable(false)
 @Table(name="Person") // to whole table must be persisted 
 @NamedQuery(name="Person.findAll", query="SELECT p FROM Person p")
 @XmlRootElement
