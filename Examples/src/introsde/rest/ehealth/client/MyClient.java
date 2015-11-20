@@ -113,7 +113,6 @@ public class MyClient {
 		// }
 		// }
 		Node last_node = nodes.item(nodes.getLength() - 1);
-		// comment to push
 		counterPerson = MyClient.countSubStringOccur(resp, "<person");
 		if (counterPerson < 3) {
 			result = "ERROR (less than 3 persons)";

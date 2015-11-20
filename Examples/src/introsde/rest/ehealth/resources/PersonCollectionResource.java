@@ -57,7 +57,14 @@ public class PersonCollectionResource {
 			MediaType.APPLICATION_XML })
 	public List<Person> getPersonsBrowser() {
 		System.out.println("Request #1: GET /person");
-		List<Person> people = Person.getAll();
+		List<Person> people = null;
+		try {
+			people = Person.getAll();
+		} catch (Exception e) {
+			System.out.println("fottuto");
+			e.printStackTrace();
+		}
+
 		return people;
 	}
 

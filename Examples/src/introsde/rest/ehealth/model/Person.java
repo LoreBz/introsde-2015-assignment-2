@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
 // to whole table must be persisted
 @NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p")
 @XmlRootElement
-@XmlType(propOrder = { "name", "lastname", "birthdate", "lifeStatus" })
+@XmlType(propOrder = { "idPerson","name", "lastname", "birthdate", "lifeStatus" })
 public class Person implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -74,6 +74,7 @@ public class Person implements Serializable {
 
 	// getters
 	@XmlElement(name="personID")
+	//@XmlTransient
 	public int getIdPerson() {
 		return idPerson;
 	}

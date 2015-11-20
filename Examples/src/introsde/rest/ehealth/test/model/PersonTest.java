@@ -1,11 +1,13 @@
 package introsde.rest.ehealth.test.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import introsde.rest.ehealth.model.Person;
 
-import java.util.Calendar;
-import java.util.List;
+import java.io.File;
 import java.text.ParseException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -18,6 +20,9 @@ import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -33,13 +38,25 @@ public class PersonTest {
 				.getResultList();
 		for (Person person : list) {
 			System.out.println("--> Person = "+person.toString());
+			 try {
+					JAXBContext jaxbContext = JAXBContext.newInstance(Person.class);
+					Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+					// output pretty printed
+					jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+					jaxbMarshaller.marshal(person, System.out);
+
+				      } catch (JAXBException e) {
+					e.printStackTrace();
+				      }
 		}
 		assertTrue(list.size()>10);
 	}
 
 	// test for adding person without using the DAO object, but isntead using the entity manager 
 	// created in the testing unit by the beforetest method
-	@Test
+	//@Test
 	public void addPersonTest() throws ParseException {
 		System.out.println("--> TEST: addPerson");
 		// count people before starting
@@ -103,7 +120,7 @@ public class PersonTest {
 	}
 
 	// same adding person test, but using the DAO object
-	@Test
+	//@Test
 	public void addPersonWithDaoTest() throws ParseException {
 		System.out.println("--> TEST: addPersonWithDao");
 
