@@ -77,6 +77,8 @@
         <dependency org="org.glassfish.jersey.media" name="jersey-media-json-jackson" rev="2.11"/>
         <dependency org="junit" name="junit-dep" rev="4.8.2"/>  
         <dependency org="com.google.code.gson" name="gson" rev="2.4" />
+        <dependency org="commons-io" name="commons-io" rev="2.4"/>
+        
            
 		<!--dependency org="org.jboss.resteasy" name="resteasy-jaxrs" rev="3.0.13.Final"/-->
 		

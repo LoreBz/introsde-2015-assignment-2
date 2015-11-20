@@ -2,3 +2,4 @@
 /WebContent/WEB-INF/lib/
 out.*
 /build/
+*.txt

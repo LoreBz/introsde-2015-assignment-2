@@ -17,7 +17,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 @Stateless
@@ -72,19 +71,16 @@ public class PersonResource {
 
 	@PUT
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response putPerson(Person person) throws ParseException {
+	public Person putPerson(Person person) throws ParseException {
 		System.out.println("--> Updating Person... " + this.id);
 		System.out.println("--> " + person.toString());
 		System.out.println("Request #3: PUT /person/{id}");
-		Response res;
 		Person existing = getPersonById(this.id);
+		Person retval = null;
 
 		if (existing == null) {
-			res = Response.noContent().build();
+			throw new RuntimeException("PUT: Person with " + id + " not found");
 		} else {
-
-			res = Response.created(uriInfo.getAbsolutePath()).build();
-
 			System.out.println("preparing update..");
 			Person p = new Person();
 			p.setIdPerson(this.id);
@@ -103,10 +99,10 @@ public class PersonResource {
 			// p.setBirthdate(existing.getBirthdate());
 			p.setLifeStatus(existing.getLifeStatus());
 
-			Person.updatePerson(p);
+			retval = Person.updatePerson(p);
 
 		}
-		return res;
+		return retval;
 	}
 
 	@DELETE
