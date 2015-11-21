@@ -85,7 +85,6 @@ public class PersonCollectionResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Person newPerson(Person person) throws IOException, ParseException {
 		System.out.println("Request #4: POST /person");
-		System.out.println("Request #4: POST /person");
 		Person p = new Person();
 		p.setName(person.getName());
 		p.setLastname(person.getLastname());

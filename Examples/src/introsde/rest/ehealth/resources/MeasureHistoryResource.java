@@ -218,15 +218,7 @@ public class MeasureHistoryResource {
 		toSave.setPerson(existingPerson);
 		toSave.setValue(record.getValue());
 		LifeStatus.saveLifeStatus(toSave);
-		// for some strange reason we should also update person lifestatus
-		// manually
-//		List<LifeStatus> oldStatus = existingPerson.getLifeStatus();
-//		if (existingLS != null) {
-//			oldStatus.remove(existingLS);
-//		}
-//		oldStatus.add(toSave);
-//		existingPerson.setLifeStatus(oldStatus);
-//		Person.updatePerson(existingPerson);
+
 		// and put the record in the history too
 		HealthMeasureHistory hm = new HealthMeasureHistory();
 		hm.setPerson(existingPerson);
