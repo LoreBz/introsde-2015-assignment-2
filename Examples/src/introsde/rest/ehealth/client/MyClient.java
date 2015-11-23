@@ -66,23 +66,75 @@ public class MyClient {
 	static ArrayList<MeasureDefinition> measures = new ArrayList<>();
 	static Map<Integer, String> mids = new HashMap<>();
 
-	public static void main(String[] args) throws IOException, JAXBException,
-			SAXException, TransformerException, ParserConfigurationException,
-			XPathExpressionException {
+	public static void main(String[] args) {
 		System.out.println(getBaseURI());
-		request1();
-		request2();
-		request3();
-		request4();
-		request5();
-		request6();
-		request7();
-		request8();
-		request9();
+		try {
+			request1();
+		} catch (Exception e) {
+			System.out.println(
+					"Something wrong with step 3.1\nIf you want to inspect the code check the method with name request1()");
+		}
+		System.out.println("\n#############################\n");
+		try {
+			request2();
+		} catch (Exception e) {
+			System.out.println(
+					"Something wrong with step 3.2\nIf you want to inspect the code check the method with name request2()");
+		}
+		System.out.println("\n#############################\n");
+		try {
+			request3();
+		} catch (Exception e) {
+			System.out.println(
+					"Something wrong with step 3.3\nIf you want to inspect the code check the method with name request3()");
+		}
+		System.out.println("\n#############################\n");
+		try {
+			request4();
+		} catch (Exception e) {
+			System.out.println(
+					"Something wrong with step 3.4\nIf you want to inspect the code check the method with name request4()");
+		}
+		System.out.println("\n#############################\n");
+		try {
+			request5();
+		} catch (Exception e) {
+			System.out.println(
+					"Something wrong with step 3.5\nIf you want to inspect the code check the method with name request5()");
+		}
+		System.out.println("\n#############################\n");
+		try {
+			request6();
+		} catch (Exception e) {
+			System.out.println(
+					"Something wrong with step 3.6\nIf you want to inspect the code check the method with name request6()");
+		}
+		System.out.println("\n#############################\n");
+		try {
+			request7();
+		} catch (Exception e) {
+			System.out.println(
+					"Something wrong with step 3.7\nIf you want to inspect the code check the method with name request7()");
+		}
+		System.out.println("\n#############################\n");
+		try {
+			request8();
+		} catch (Exception e) {
+			System.out.println(
+					"Something wrong with step 3.8\nIf you want to inspect the code check the method with name request8()");
+		}
+		System.out.println("\n#############################\n");
+		try {
+			request9();
+		} catch (Exception e) {
+			System.out.println(
+					"Something wrong with step 3.9\nIf you want to inspect the code check the method with name request9()");
+		}
+		System.out.println("\n#############################\n");
 	}
 
-	private static void request1() throws ParserConfigurationException,
-			SAXException, IOException, TransformerException {
+	private static void request1()
+			throws ParserConfigurationException, SAXException, IOException, TransformerException {
 		ClientConfig clientConfig = new ClientConfig();
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
@@ -106,8 +158,7 @@ public class MyClient {
 		url = getBaseURI() + "/person";
 		accept = MediaType.APPLICATION_XML;
 		contentType = "";
-		out.println("Request #1: GET " + url + " Accept: " + accept
-				+ " Content-type: " + contentType);
+		out.println("Request #1: GET " + url + " Accept: " + accept + " Content-type: " + contentType);
 		response = service.path("person").request().accept(accept).get();
 		resp = response.readEntity(String.class);
 
@@ -161,8 +212,7 @@ public class MyClient {
 		url = getBaseURI() + "/person";
 		accept = MediaType.APPLICATION_JSON;
 		contentType = "";
-		out.println("Request #1: GET " + url + " Accept: " + accept
-				+ " Content-type: " + contentType);
+		out.println("Request #1: GET " + url + " Accept: " + accept + " Content-type: " + contentType);
 		response = service.path("person").request().accept(accept).get();
 		resp = response.readEntity(String.class);
 
@@ -187,8 +237,8 @@ public class MyClient {
 
 	}
 
-	private static void request2() throws TransformerException,
-			ParserConfigurationException, SAXException, IOException {
+	private static void request2()
+			throws TransformerException, ParserConfigurationException, SAXException, IOException {
 		ClientConfig clientConfig = new ClientConfig();
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
@@ -211,10 +261,8 @@ public class MyClient {
 		url = getBaseURI() + "/person/" + first_person_id;
 		accept = MediaType.APPLICATION_XML;
 		contentType = "";
-		out.println("Request #2: GET " + url + " Accept: " + accept
-				+ " Content-type: " + contentType);
-		response = service.path("person/" + first_person_id).request()
-				.accept(accept).get();
+		out.println("Request #2: GET " + url + " Accept: " + accept + " Content-type: " + contentType);
+		response = service.path("person/" + first_person_id).request().accept(accept).get();
 		resp = response.readEntity(String.class);
 
 		responseCode = response.getStatus();
@@ -232,10 +280,8 @@ public class MyClient {
 		url = getBaseURI() + "/person/" + first_person_id;
 		accept = MediaType.APPLICATION_JSON;
 		contentType = "";
-		out.println("Request #2: GET " + url + " Accept: " + accept
-				+ " Content-type: " + contentType);
-		response = service.path("person/" + first_person_id).request()
-				.accept(accept).get();
+		out.println("Request #2: GET " + url + " Accept: " + accept + " Content-type: " + contentType);
+		response = service.path("person/" + first_person_id).request().accept(accept).get();
 		resp = response.readEntity(String.class);
 
 		responseCode = response.getStatus();
@@ -253,8 +299,8 @@ public class MyClient {
 
 	}
 
-	private static void request3() throws TransformerException,
-			ParserConfigurationException, SAXException, IOException {
+	private static void request3()
+			throws TransformerException, ParserConfigurationException, SAXException, IOException {
 		ClientConfig clientConfig = new ClientConfig();
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
@@ -277,36 +323,21 @@ public class MyClient {
 		url = getBaseURI() + "/person/" + first_person_id;
 		accept = MediaType.APPLICATION_XML;
 		contentType = MediaType.APPLICATION_XML;
-		out.println("Request #3: PUT " + url + " Accept: " + accept
-				+ " Content-type: " + contentType);
+		out.println("Request #3: PUT " + url + " Accept: " + accept + " Content-type: " + contentType);
 
-		int randomNumberxml = new Random(System.currentTimeMillis())
-				.nextInt(10000);
+		int randomNumberxml = new Random(System.currentTimeMillis()).nextInt(10000);
 		String newNamexml = "newName#" + randomNumberxml;
-		String bodyxml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?> "
-				+ "<person> "
-				+ "    <firstname>"
-				+ newNamexml
-				+ "</firstname> "
-				+ "    <lastname>Duck</lastname> "
-				+ "    <birthdate>01/09/1978</birthdate> "
-				+ "    <healthProfile> "
-				+ "        <lifeStatus> "
-				+ "            <measureDefinition> "
-				+ "                <measureName>weight</measureName> "
-				+ "            </measureDefinition> "
-				+ "            <value>62.9</value> "
-				+ "        </lifeStatus> "
-				+ "        <lifeStatus> "
-				+ "            <measureDefinition> "
-				+ "                <measureName>height</measureName> "
-				+ "            </measureDefinition> "
-				+ "            <value>171.5</value> "
-				+ "        </lifeStatus> "
-				+ "    </healthProfile> "
+		String bodyxml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?> " + "<person> "
+				+ "    <firstname>" + newNamexml + "</firstname> " + "    <lastname>Duck</lastname> "
+				+ "    <birthdate>01/09/1978</birthdate> " + "    <healthProfile> " + "        <lifeStatus> "
+				+ "            <measureDefinition> " + "                <measureName>weight</measureName> "
+				+ "            </measureDefinition> " + "            <value>62.9</value> " + "        </lifeStatus> "
+				+ "        <lifeStatus> " + "            <measureDefinition> "
+				+ "                <measureName>height</measureName> " + "            </measureDefinition> "
+				+ "            <value>171.5</value> " + "        </lifeStatus> " + "    </healthProfile> "
 				+ "</person> ";
-		response = service.path("person/" + first_person_id).request()
-				.accept(MediaType.APPLICATION_XML).put(Entity.xml(bodyxml));
+		response = service.path("person/" + first_person_id).request().accept(MediaType.APPLICATION_XML)
+				.put(Entity.xml(bodyxml));
 		resp = response.readEntity(String.class);
 
 		InputSource is = new InputSource();
@@ -335,25 +366,19 @@ public class MyClient {
 		url = getBaseURI() + "/person/" + first_person_id;
 		accept = MediaType.APPLICATION_JSON;
 		contentType = MediaType.APPLICATION_JSON;
-		out.println("Request #3: PUT " + url + " Accept: " + accept
-				+ " Content-type: " + contentType);
+		out.println("Request #3: PUT " + url + " Accept: " + accept + " Content-type: " + contentType);
 
-		int randomNumberj = new Random(System.currentTimeMillis())
-				.nextInt(10000);
+		int randomNumberj = new Random(System.currentTimeMillis()).nextInt(10000);
 		String newNamejson = "newName#" + randomNumberj;
-		String bodyj = "{ " + "  \"firstname\": \"" + newNamejson + "\", "
-				+ "  \"lastname\": \"Paperino\", "
-				+ "  \"birthdate\": \"01/09/1978\", " + "  \"lifeStatus\": [ "
-				+ "    { " + "      \"value\": \"168.7\", "
-				+ "      \"measureDefinition\": { "
-				+ "        \"measureName\": \"height\" " + "      } "
-				+ "    }, " + "    { " + "      \"value\": \"78.7\", "
-				+ "      \"measureDefinition\": { "
-				+ "        \"measureName\": \"weight\" " + "      } "
-				+ "    } " + "  ] " + "} ";
+		String bodyj = "{ " + "  \"firstname\": \"" + newNamejson + "\", " + "  \"lastname\": \"Paperino\", "
+				+ "  \"birthdate\": \"01/09/1978\", " + "  \"lifeStatus\": [ " + "    { "
+				+ "      \"value\": \"168.7\", " + "      \"measureDefinition\": { "
+				+ "        \"measureName\": \"height\" " + "      } " + "    }, " + "    { "
+				+ "      \"value\": \"78.7\", " + "      \"measureDefinition\": { "
+				+ "        \"measureName\": \"weight\" " + "      } " + "    } " + "  ] " + "} ";
 
-		response = service.path("person/" + first_person_id).request()
-				.accept(MediaType.APPLICATION_JSON).put(Entity.json(bodyj));
+		response = service.path("person/" + first_person_id).request().accept(MediaType.APPLICATION_JSON)
+				.put(Entity.json(bodyj));
 		resp = response.readEntity(String.class);
 
 		resp = resp.replaceAll("firstname", "name");
@@ -378,8 +403,8 @@ public class MyClient {
 
 	}
 
-	private static void request4() throws TransformerException,
-			ParserConfigurationException, SAXException, IOException {
+	private static void request4()
+			throws TransformerException, ParserConfigurationException, SAXException, IOException {
 		ClientConfig clientConfig = new ClientConfig();
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
@@ -402,24 +427,17 @@ public class MyClient {
 		url = getBaseURI() + "/person";
 		accept = MediaType.APPLICATION_XML;
 		contentType = MediaType.APPLICATION_XML;
-		out.println("Request #4: POST " + url + " Accept: " + accept
-				+ " Content-type: " + contentType);
+		out.println("Request #4: POST " + url + " Accept: " + accept + " Content-type: " + contentType);
 
-		String bodyxml = "<person> " + "    <firstname>Chuck</firstname> "
-				+ "    <lastname>Norris</lastname> "
-				+ "    <birthdate>01/01/1945</birthdate> "
-				+ "    <healthProfile> " + "        <lifeStatus> "
-				+ "            <measureDefinition> "
-				+ "                <measureName>height</measureName> "
-				+ "            </measureDefinition> "
-				+ "            <value>172</value> " + "        </lifeStatus> "
+		String bodyxml = "<person> " + "    <firstname>Chuck</firstname> " + "    <lastname>Norris</lastname> "
+				+ "    <birthdate>01/01/1945</birthdate> " + "    <healthProfile> " + "        <lifeStatus> "
+				+ "            <measureDefinition> " + "                <measureName>height</measureName> "
+				+ "            </measureDefinition> " + "            <value>172</value> " + "        </lifeStatus> "
 				+ "        <lifeStatus> " + "            <measureDefinition> "
-				+ "                <measureName>weight</measureName> "
-				+ "            </measureDefinition> "
-				+ "            <value>78.9</value> " + "        </lifeStatus> "
-				+ "    </healthProfile> " + "</person> ";
-		response = service.path("person").request().accept(accept)
-				.post(Entity.xml(bodyxml));
+				+ "                <measureName>weight</measureName> " + "            </measureDefinition> "
+				+ "            <value>78.9</value> " + "        </lifeStatus> " + "    </healthProfile> "
+				+ "</person> ";
+		response = service.path("person").request().accept(accept).post(Entity.xml(bodyxml));
 		resp = response.readEntity(String.class);
 		responseCode = response.getStatus();
 
@@ -434,8 +452,7 @@ public class MyClient {
 		if (responseCode == 200 || responseCode == 201 || responseCode == 202) {
 			if (nodes.getLength() == 1) {
 				Node node = nodes.item(0);
-				if (node.getTextContent() != null
-						&& !node.getTextContent().equals("")) {
+				if (node.getTextContent() != null && !node.getTextContent().equals("")) {
 					result = "OK, person saved with ID" + node.getTextContent();
 					to_delete_id_xml = Integer.parseInt(node.getTextContent());
 				}
@@ -452,22 +469,15 @@ public class MyClient {
 		url = getBaseURI() + "/person";
 		accept = MediaType.APPLICATION_JSON;
 		contentType = MediaType.APPLICATION_JSON;
-		out.println("Request #4: POST " + url + " Accept: " + accept
-				+ " Content-type: " + contentType);
+		out.println("Request #4: POST " + url + " Accept: " + accept + " Content-type: " + contentType);
 
-		String bodyj = "{ " + "  \"firstname\": \"" + "Chuck" + "\", "
-				+ "  \"lastname\": \"Norris\", "
-				+ "  \"birthdate\": \"01/01/1945\", " + "  \"lifeStatus\": [ "
-				+ "    { " + "      \"value\": \"172\", "
-				+ "      \"measureDefinition\": { "
-				+ "        \"measureName\": \"height\" " + "      } "
-				+ "    }, " + "    { " + "      \"value\": \"78.9\", "
-				+ "      \"measureDefinition\": { "
-				+ "        \"measureName\": \"weight\" " + "      } "
-				+ "    } " + "  ] " + "} ";
+		String bodyj = "{ " + "  \"firstname\": \"" + "Chuck" + "\", " + "  \"lastname\": \"Norris\", "
+				+ "  \"birthdate\": \"01/01/1945\", " + "  \"lifeStatus\": [ " + "    { " + "      \"value\": \"172\", "
+				+ "      \"measureDefinition\": { " + "        \"measureName\": \"height\" " + "      } " + "    }, "
+				+ "    { " + "      \"value\": \"78.9\", " + "      \"measureDefinition\": { "
+				+ "        \"measureName\": \"weight\" " + "      } " + "    } " + "  ] " + "} ";
 
-		response = service.path("person").request().accept(accept)
-				.post(Entity.json(bodyj));
+		response = service.path("person").request().accept(accept).post(Entity.json(bodyj));
 		resp = response.readEntity(String.class);
 
 		resp = resp.replaceAll("firstname", "name");
@@ -515,11 +525,9 @@ public class MyClient {
 		url = getBaseURI() + "/person/" + to_delete_id_xml;
 		accept = "";
 		contentType = "";
-		out.println("Request #5: DELETE " + url + " Accept: " + accept
-				+ " Content-type: " + contentType);
+		out.println("Request #5: DELETE " + url + " Accept: " + accept + " Content-type: " + contentType);
 
-		response = service.path("person/" + to_delete_id_xml).request()
-				.accept(accept).delete();
+		response = service.path("person/" + to_delete_id_xml).request().accept(accept).delete();
 		resp = response.readEntity(String.class);
 
 		responseCode = response.getStatus();
@@ -529,16 +537,13 @@ public class MyClient {
 			url = getBaseURI() + "/person/" + to_delete_id_xml;
 			accept = MediaType.APPLICATION_XML;
 			contentType = "";
-			out.println("Subsequent request: GET " + url + " Accept: " + accept
-					+ " Content-type: " + contentType);
-			response = service.path("person/" + to_delete_id_xml).request()
-					.accept(accept).get();
+			out.println("Subsequent request: GET " + url + " Accept: " + accept + " Content-type: " + contentType);
+			response = service.path("person/" + to_delete_id_xml).request().accept(accept).get();
 			resp = response.readEntity(String.class);
 			responseCode = response.getStatus();
 			out.println("=>Subsequent HTTP Status: " + responseCode);
 			if (responseCode == 404) {
-				result = "OK, person with id" + to_delete_id_xml
-						+ " is not present in the db";
+				result = "OK, person with id" + to_delete_id_xml + " is not present in the db";
 			} else {
 				result = "ERROR";
 			}
@@ -549,11 +554,9 @@ public class MyClient {
 		url = getBaseURI() + "/person/" + to_delete_id_json;
 		accept = "";
 		contentType = "";
-		out.println("Request #5: DELETE " + url + " Accept: " + accept
-				+ " Content-type: " + contentType);
+		out.println("Request #5: DELETE " + url + " Accept: " + accept + " Content-type: " + contentType);
 
-		response = service.path("person/" + to_delete_id_json).request()
-				.accept(accept).delete();
+		response = service.path("person/" + to_delete_id_json).request().accept(accept).delete();
 		resp = response.readEntity(String.class);
 
 		responseCode = response.getStatus();
@@ -563,16 +566,13 @@ public class MyClient {
 			url = getBaseURI() + "/person/" + to_delete_id_json;
 			accept = MediaType.APPLICATION_JSON;
 			contentType = "";
-			out.println("Subsequent request: GET " + url + " Accept: " + accept
-					+ " Content-type: " + contentType);
-			response = service.path("person/" + to_delete_id_json).request()
-					.accept(accept).get();
+			out.println("Subsequent request: GET " + url + " Accept: " + accept + " Content-type: " + contentType);
+			response = service.path("person/" + to_delete_id_json).request().accept(accept).get();
 			resp = response.readEntity(String.class);
 			responseCode = response.getStatus();
 			out.println("=>Subsequent HTTP Status: " + responseCode);
 			if (responseCode == 404) {
-				result = "OK, person with id" + to_delete_id_json
-						+ " is not present in the db";
+				result = "OK, person with id" + to_delete_id_json + " is not present in the db";
 			} else {
 				result = "ERROR";
 			}
@@ -582,8 +582,8 @@ public class MyClient {
 		out.close();
 	}
 
-	private static void request6() throws ParserConfigurationException,
-			SAXException, IOException, TransformerException {
+	private static void request6()
+			throws ParserConfigurationException, SAXException, IOException, TransformerException {
 		ClientConfig clientConfig = new ClientConfig();
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
@@ -606,8 +606,7 @@ public class MyClient {
 		url = getBaseURI() + "/measureTypes";
 		accept = MediaType.APPLICATION_XML;
 		contentType = "";
-		out.println("Request #6: GET " + url + " Accept: " + accept
-				+ " Content-type: " + contentType);
+		out.println("Request #6: GET " + url + " Accept: " + accept + " Content-type: " + contentType);
 
 		response = service.path("measureTypes").request().accept(accept).get();
 		resp = response.readEntity(String.class);
@@ -643,15 +642,13 @@ public class MyClient {
 		url = getBaseURI() + "/measureTypes";
 		accept = MediaType.APPLICATION_JSON;
 		contentType = "";
-		out.println("Request #6: GET " + url + " Accept: " + accept
-				+ " Content-type: " + contentType);
+		out.println("Request #6: GET " + url + " Accept: " + accept + " Content-type: " + contentType);
 
 		response = service.path("measureTypes").request().accept(accept).get();
 		resp = response.readEntity(String.class);
 
 		Gson gson = new Gson();
-		MeasureDefinition[] mdlist = gson.fromJson(resp,
-				MeasureDefinition[].class);
+		MeasureDefinition[] mdlist = gson.fromJson(resp, MeasureDefinition[].class);
 		measures.clear();
 		measures.addAll(Arrays.asList(mdlist));
 		if (measures.size() > 2) {
@@ -667,8 +664,7 @@ public class MyClient {
 		out.close();
 	}
 
-	private static void request7() throws IOException,
-			ParserConfigurationException, SAXException {
+	private static void request7() throws IOException, ParserConfigurationException, SAXException {
 		ClientConfig clientConfig = new ClientConfig();
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
@@ -694,8 +690,8 @@ public class MyClient {
 		// xml and first person
 		for (MeasureDefinition md : measures) {
 			url = "person/" + first_person_id + "/" + md.getMeasureName();
-			out.println("Request #7: GET " + getBaseURI() + "/" + url
-					+ " Accept: " + accept + " Content-type: " + contentType);
+			out.println("Request #7: GET " + getBaseURI() + "/" + url + " Accept: " + accept + " Content-type: "
+					+ contentType);
 
 			response = service.path(url).request().accept(accept).get();
 			resp = response.readEntity(String.class);
@@ -704,13 +700,11 @@ public class MyClient {
 			if (responseCode != 404) {
 				InputSource is = new InputSource();
 				is.setCharacterStream(new StringReader(resp));
-				DocumentBuilderFactory dbFactory = DocumentBuilderFactory
-						.newInstance();
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 				Document doc = dBuilder.parse(is);
 				NodeList midlist = doc.getElementsByTagName("mid");
-				mids.put(Integer.parseInt(midlist.item(0).getTextContent()),
-						md.getMeasureName());
+				mids.put(Integer.parseInt(midlist.item(0).getTextContent()), md.getMeasureName());
 			}
 			out.println(indentXML(resp));
 		}
@@ -718,8 +712,8 @@ public class MyClient {
 		// xml and last person
 		for (MeasureDefinition md : measures) {
 			url = "person/" + last_person_id + "/" + md.getMeasureName();
-			out.println("Request #7: GET " + getBaseURI() + "/" + url
-					+ " Accept: " + accept + " Content-type: " + contentType);
+			out.println("Request #7: GET " + getBaseURI() + "/" + url + " Accept: " + accept + " Content-type: "
+					+ contentType);
 			response = service.path(url).request().accept(accept).get();
 			resp = response.readEntity(String.class);
 			responseCode = response.getStatus();
@@ -727,8 +721,7 @@ public class MyClient {
 			if (responseCode != 404) {
 				InputSource is = new InputSource();
 				is.setCharacterStream(new StringReader(resp));
-				DocumentBuilderFactory dbFactory = DocumentBuilderFactory
-						.newInstance();
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 				Document doc = dBuilder.parse(is);
 				NodeList midlist = doc.getElementsByTagName("mid");
@@ -743,8 +736,8 @@ public class MyClient {
 		// json and first person
 		for (MeasureDefinition md : measures) {
 			url = "person/" + first_person_id + "/" + md.getMeasureName();
-			out.println("Request #7: GET " + getBaseURI() + "/" + url
-					+ " Accept: " + accept + " Content-type: " + contentType);
+			out.println("Request #7: GET " + getBaseURI() + "/" + url + " Accept: " + accept + " Content-type: "
+					+ contentType);
 
 			response = service.path(url).request().accept(accept).get();
 			resp = response.readEntity(String.class);
@@ -756,8 +749,7 @@ public class MyClient {
 				resp = resp.replaceAll("created", "timestamp");
 
 				ObjectMapper mapper = new ObjectMapper();
-				HealthMeasureHistory[] hmlist = mapper.readValue(resp,
-						HealthMeasureHistory[].class);
+				HealthMeasureHistory[] hmlist = mapper.readValue(resp, HealthMeasureHistory[].class);
 				for (HealthMeasureHistory hm : hmlist) {
 					mids.put(hm.getIdMeasureHistory(), md.getMeasureName());
 				}
@@ -768,8 +760,8 @@ public class MyClient {
 		// json and last person
 		for (MeasureDefinition md : measures) {
 			url = "person/" + last_person_id + "/" + md.getMeasureName();
-			out.println("Request #7: GET " + getBaseURI() + "/" + url
-					+ " Accept: " + accept + " Content-type: " + contentType);
+			out.println("Request #7: GET " + getBaseURI() + "/" + url + " Accept: " + accept + " Content-type: "
+					+ contentType);
 
 			response = service.path(url).request().accept(accept).get();
 			resp = response.readEntity(String.class);
@@ -780,8 +772,7 @@ public class MyClient {
 				resp = resp.replaceAll("created", "timestamp");
 
 				ObjectMapper mapper = new ObjectMapper();
-				HealthMeasureHistory[] hmlist = mapper.readValue(resp,
-						HealthMeasureHistory[].class);
+				HealthMeasureHistory[] hmlist = mapper.readValue(resp, HealthMeasureHistory[].class);
 			}
 			out.println(indentJSON(resp));
 		}
@@ -822,15 +813,14 @@ public class MyClient {
 		url = "person/" + first_person_id + "/" + measuretype + "/" + mid;
 		accept = MediaType.APPLICATION_XML;
 		contentType = "";
-		out.println("Request #8: GET " + getBaseURI() + "/" + url + " Accept: "
-				+ accept + " Content-type: " + contentType);
+		out.println(
+				"Request #8: GET " + getBaseURI() + "/" + url + " Accept: " + accept + " Content-type: " + contentType);
 
 		response = service.path(url).request().accept(accept).get();
 		resp = response.readEntity(String.class);
 		responseCode = response.getStatus();
 		if (responseCode != 404) {
-			result = "OK, HealthMeasure record with id=" + mid + " and type="
-					+ measuretype + " found!";
+			result = "OK, HealthMeasure record with id=" + mid + " and type=" + measuretype + " found!";
 		} else {
 			result = "ERROR";
 		}
@@ -842,15 +832,14 @@ public class MyClient {
 		url = "person/" + first_person_id + "/" + measuretype + "/" + mid;
 		accept = MediaType.APPLICATION_JSON;
 		contentType = "";
-		out.println("Request #8: GET " + getBaseURI() + "/" + url + " Accept: "
-				+ accept + " Content-type: " + contentType);
+		out.println(
+				"Request #8: GET " + getBaseURI() + "/" + url + " Accept: " + accept + " Content-type: " + contentType);
 
 		response = service.path(url).request().accept(accept).get();
 		resp = response.readEntity(String.class);
 		responseCode = response.getStatus();
 		if (responseCode != 404) {
-			result = "OK, HealthMeasure record with id=" + mid + " and type="
-					+ measuretype + " found!";
+			result = "OK, HealthMeasure record with id=" + mid + " and type=" + measuretype + " found!";
 		} else {
 			result = "ERROR";
 		}
@@ -861,8 +850,7 @@ public class MyClient {
 		out.close();
 	}
 
-	private static void request9() throws JsonParseException,
-			JsonMappingException, IOException, JAXBException {
+	private static void request9() throws JsonParseException, JsonMappingException, IOException, JAXBException {
 
 		ClientConfig clientConfig = new ClientConfig();
 		Client client = ClientBuilder.newClient(clientConfig);
@@ -895,8 +883,7 @@ public class MyClient {
 			resp = resp.replaceAll("mid", "idMeasureHistory");
 			resp = resp.replaceAll("created", "timestamp");
 			ObjectMapper mapper = new ObjectMapper();
-			HealthMeasureHistory[] hmlist = mapper.readValue(resp,
-					HealthMeasureHistory[].class);
+			HealthMeasureHistory[] hmlist = mapper.readValue(resp, HealthMeasureHistory[].class);
 			counterBefore = hmlist.length;
 		}
 
@@ -904,8 +891,8 @@ public class MyClient {
 		accept = MediaType.APPLICATION_XML;
 		contentType = MediaType.APPLICATION_XML;
 		url = "person/" + first_person_id + "/weight";
-		out.println("Request #9: POST " + getBaseURI() + "/" + url
-				+ " Accept: " + accept + " Content-type: " + contentType);
+		out.println("Request #9: POST " + getBaseURI() + "/" + url + " Accept: " + accept + " Content-type: "
+				+ contentType);
 
 		LifeStatus lifestatus = new LifeStatus();
 		lifestatus.setValue("72");
@@ -913,11 +900,9 @@ public class MyClient {
 		Marshaller m = jc.createMarshaller();
 		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		m.marshal(lifestatus, new StreamResult(new OutputStreamWriter(
-				outputStream, "UTF-8")));
+		m.marshal(lifestatus, new StreamResult(new OutputStreamWriter(outputStream, "UTF-8")));
 		String bodyxml = outputStream.toString();
-		response = service.path(url).request().accept(accept)
-				.post(Entity.xml(bodyxml));
+		response = service.path(url).request().accept(accept).post(Entity.xml(bodyxml));
 		resp = response.readEntity(String.class);
 		responseCode = response.getStatus();
 
@@ -934,8 +919,7 @@ public class MyClient {
 			resp2 = resp2.replaceAll("mid", "idMeasureHistory");
 			resp2 = resp2.replaceAll("created", "timestamp");
 			ObjectMapper mapper = new ObjectMapper();
-			HealthMeasureHistory[] hmlist = mapper.readValue(resp2,
-					HealthMeasureHistory[].class);
+			HealthMeasureHistory[] hmlist = mapper.readValue(resp2, HealthMeasureHistory[].class);
 			int counterAfter = hmlist.length;
 			if (counterAfter == (counterBefore + 1)) {
 				result = "OK, one more record!";
@@ -961,8 +945,7 @@ public class MyClient {
 			resp = resp.replaceAll("mid", "idMeasureHistory");
 			resp = resp.replaceAll("created", "timestamp");
 			ObjectMapper mapper = new ObjectMapper();
-			HealthMeasureHistory[] hmlist = mapper.readValue(resp,
-					HealthMeasureHistory[].class);
+			HealthMeasureHistory[] hmlist = mapper.readValue(resp, HealthMeasureHistory[].class);
 			counterBefore = hmlist.length;
 		}
 
@@ -970,8 +953,8 @@ public class MyClient {
 		accept = MediaType.APPLICATION_JSON;
 		contentType = MediaType.APPLICATION_JSON;
 		url = "person/" + first_person_id + "/height";
-		out.println("Request #9: POST " + getBaseURI() + "/" + url
-				+ " Accept: " + accept + " Content-type: " + contentType);
+		out.println("Request #9: POST " + getBaseURI() + "/" + url + " Accept: " + accept + " Content-type: "
+				+ contentType);
 
 		LifeStatus lifestatusj = new LifeStatus();
 		lifestatusj.setValue("172");
@@ -982,8 +965,7 @@ public class MyClient {
 		mapperj.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
 		String bodyjson = mapperj.writeValueAsString(lifestatusj);
 
-		response = service.path(url).request().accept(accept)
-				.post(Entity.json(bodyjson));
+		response = service.path(url).request().accept(accept).post(Entity.json(bodyjson));
 		resp = response.readEntity(String.class);
 		responseCode = response.getStatus();
 
@@ -1000,8 +982,7 @@ public class MyClient {
 			resp3 = resp3.replaceAll("mid", "idMeasureHistory");
 			resp3 = resp3.replaceAll("created", "timestamp");
 			ObjectMapper mapper = new ObjectMapper();
-			HealthMeasureHistory[] hmlist = mapper.readValue(resp3,
-					HealthMeasureHistory[].class);
+			HealthMeasureHistory[] hmlist = mapper.readValue(resp3, HealthMeasureHistory[].class);
 			int counterAfter = hmlist.length;
 			if (counterAfter == (counterBefore + 1)) {
 				result = "OK, one more record!";
@@ -1017,8 +998,7 @@ public class MyClient {
 	}
 
 	private static URI getBaseURI() {
-		return UriBuilder.fromUri(
-				"http://lorebzassignment2.herokuapp.com/sdelab").build();
+		return UriBuilder.fromUri("http://lorebzassignment2.herokuapp.com/sdelab").build();
 		// "http://localhost:5700/sdelab").build();
 	}
 
@@ -1027,8 +1007,7 @@ public class MyClient {
 			InputSource is = new InputSource();
 			is.setCharacterStream(new StringReader(resp));
 
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
-					.newInstance();
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(is);
 			TransformerFactory tf = TransformerFactory.newInstance();
@@ -1038,11 +1017,9 @@ public class MyClient {
 			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-			transformer.setOutputProperty(
-					"{http://xml.apache.org/xslt}indent-amount", "4");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			transformer.transform(new DOMSource(doc), new StreamResult(
-					new OutputStreamWriter(outputStream, "UTF-8")));
+			transformer.transform(new DOMSource(doc), new StreamResult(new OutputStreamWriter(outputStream, "UTF-8")));
 
 			return outputStream.toString();
 		} catch (Exception e) {
@@ -1053,8 +1030,7 @@ public class MyClient {
 
 	private static String indentJSON(String toIndent) {
 		try {
-			String retval = new GsonBuilder().setPrettyPrinting().create()
-					.toJson(new JsonParser().parse(toIndent));
+			String retval = new GsonBuilder().setPrettyPrinting().create().toJson(new JsonParser().parse(toIndent));
 			return retval;
 		} catch (Exception e) {
 			return toIndent;

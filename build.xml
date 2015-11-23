@@ -169,7 +169,7 @@
 	</target>
 	<target name="restart" depends="compile, start">
 	</target>
-	<target name="execute.client">
+	<target name="execute.client" depends="install">
 		<echo message=" start introsde.rest.ehealth.client MyClient in ${build.dir}" />
 		<java classname="introsde.rest.ehealth.client.MyClient" classpath="${build.dir}" fork="true">
 			<arg value="$JAVA_OPTS  -cp" />
