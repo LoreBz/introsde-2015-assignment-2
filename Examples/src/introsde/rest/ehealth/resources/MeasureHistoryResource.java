@@ -185,13 +185,12 @@ public class MeasureHistoryResource {
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public LifeStatus newLifeStatus(LifeStatus record) throws IOException {
+	public Response newLifeStatus(LifeStatus record) throws IOException {
 		// we should create a new Lifestatus and archive the old one
 		System.out.println("POST /person/{id}/{measureType} aka request 8");
 		Person existingPerson = Person.getPersonById(id);
 		if (existingPerson == null) {
-			throw new RuntimeException(
-					"You are trying to post a measure related to a non existing Person!");
+			return Response.status(404).entity("You are trying to post a measure related to a non existing Person!").build();
 		}
 		System.out.println("personID valid");
 		System.out
@@ -242,7 +241,7 @@ public class MeasureHistoryResource {
 		HealthMeasureHistory.saveHealthMeasureHistory(hm);
 		System.out.println("end");
 
-		return toSave;
+		return Response.ok(toSave).build();
 	}
 
 	LifeStatus getLifestatusByPersonIdAndMeasureType(int personID,

@@ -1,5 +1,6 @@
 package introsde.rest.ehealth.client;
 
+import introsde.rest.ehealth.model.HealthMeasureHistory;
 import introsde.rest.ehealth.model.MeasureDefinition;
 import introsde.rest.ehealth.model.Person;
 import introsde.rest.ehealth.myutil.MultiPrintStream;
@@ -14,7 +15,9 @@ import java.io.StringReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.ws.rs.client.Client;
@@ -43,6 +46,11 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
@@ -53,6 +61,7 @@ public class MyClient {
 	static int to_delete_id_xml;
 	static int to_delete_id_json;
 	static ArrayList<MeasureDefinition> measures = new ArrayList<>();
+	static Map<Integer, String> mids = new HashMap<>();
 
 	public static void main(String[] args) throws IOException, JAXBException,
 			SAXException, TransformerException, ParserConfigurationException,
@@ -64,10 +73,10 @@ public class MyClient {
 		request4();
 		request5();
 		request6();
-		request7xml();
+		request7();
+		request8();
+		request9();
 	}
-
-	
 
 	private static void request1() throws ParserConfigurationException,
 			SAXException, IOException, TransformerException {
@@ -567,6 +576,7 @@ public class MyClient {
 			out.println("=> Result: " + result);
 		}
 
+		out.close();
 	}
 
 	private static void request6() throws ParserConfigurationException,
@@ -651,16 +661,18 @@ public class MyClient {
 		out.println("=> HTTP Status: " + responseCode);
 		out.println(indentJSON(resp));
 
+		out.close();
 	}
-	
-	private static void request7xml() throws FileNotFoundException {
+
+	private static void request7() throws IOException,
+			ParserConfigurationException, SAXException {
 		ClientConfig clientConfig = new ClientConfig();
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
 
 		List<PrintStream> streams = new ArrayList<>();
 		streams.add(System.out);
-		FileOutputStream fileWriter = new FileOutputStream("step_3-7xml.txt");
+		FileOutputStream fileWriter = new FileOutputStream("step_3-7.txt");
 		streams.add(new PrintStream(fileWriter));
 		MultiPrintStream out = new MultiPrintStream(streams);
 
@@ -671,23 +683,231 @@ public class MyClient {
 		String contentType = "";
 		String result = "";
 		Response response = null;
-		
-		// step 3.6 Accept XML
-				accept = MediaType.APPLICATION_XML;
-				contentType = "";
-				for (MeasureDefinition md : measures) {
-					url="person/"+first_person_id+"/"+md.getMeasureName();
-					out.println("Request #6: GET " +getBaseURI()+"/"+ url + " Accept: " + accept
-							+ " Content-type: " + contentType);
 
-					response = service.path(url).request().accept(accept).get();
-					resp = response.readEntity(String.class);
+		// step 3.7 Accept XML
+		accept = MediaType.APPLICATION_XML;
+		contentType = "";
+
+		// xml and first person
+		for (MeasureDefinition md : measures) {
+			url = "person/" + first_person_id + "/" + md.getMeasureName();
+			out.println("Request #7: GET " + getBaseURI() + "/" + url
+					+ " Accept: " + accept + " Content-type: " + contentType);
+
+			response = service.path(url).request().accept(accept).get();
+			resp = response.readEntity(String.class);
+			responseCode = response.getStatus();
+			out.println("=> HTTP Status: " + responseCode);
+			if (responseCode != 404) {
+				InputSource is = new InputSource();
+				is.setCharacterStream(new StringReader(resp));
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+						.newInstance();
+				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+				Document doc = dBuilder.parse(is);
+				NodeList midlist = doc.getElementsByTagName("mid");
+				mids.put(Integer.parseInt(midlist.item(0).getTextContent()),
+						md.getMeasureName());
+			}
+			out.println(indentXML(resp));
+		}
+
+		// xml and last person
+		for (MeasureDefinition md : measures) {
+			url = "person/" + last_person_id + "/" + md.getMeasureName();
+			out.println("Request #7: GET " + getBaseURI() + "/" + url
+					+ " Accept: " + accept + " Content-type: " + contentType);
+			response = service.path(url).request().accept(accept).get();
+			resp = response.readEntity(String.class);
+			responseCode = response.getStatus();
+			out.println("=> HTTP Status: " + responseCode);
+			if (responseCode != 404) {
+				InputSource is = new InputSource();
+				is.setCharacterStream(new StringReader(resp));
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+						.newInstance();
+				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+				Document doc = dBuilder.parse(is);
+				NodeList midlist = doc.getElementsByTagName("mid");
+			}
+			out.println(indentXML(resp));
+		}
+
+		// step 3.7 Accept JSON
+		accept = MediaType.APPLICATION_JSON;
+		contentType = "";
+
+		// json and first person
+		for (MeasureDefinition md : measures) {
+			url = "person/" + first_person_id + "/" + md.getMeasureName();
+			out.println("Request #7: GET " + getBaseURI() + "/" + url
+					+ " Accept: " + accept + " Content-type: " + contentType);
+
+			response = service.path(url).request().accept(accept).get();
+			resp = response.readEntity(String.class);
+			responseCode = response.getStatus();
+			out.println("=> HTTP Status: " + responseCode);
+			if (responseCode != 404) {
+
+				resp = resp.replaceAll("mid", "idMeasureHistory");
+				resp = resp.replaceAll("created", "timestamp");
+
+				ObjectMapper mapper = new ObjectMapper();
+				HealthMeasureHistory[] hmlist = mapper.readValue(resp,
+						HealthMeasureHistory[].class);
+				for (HealthMeasureHistory hm : hmlist) {
+					mids.put(hm.getIdMeasureHistory(), md.getMeasureName());
 				}
-				
-				
+			}
+			out.println(indentJSON(resp));
+		}
+
+		// json and last person
+		for (MeasureDefinition md : measures) {
+			url = "person/" + last_person_id + "/" + md.getMeasureName();
+			out.println("Request #7: GET " + getBaseURI() + "/" + url
+					+ " Accept: " + accept + " Content-type: " + contentType);
+
+			response = service.path(url).request().accept(accept).get();
+			resp = response.readEntity(String.class);
+			responseCode = response.getStatus();
+			out.println("=> HTTP Status: " + responseCode);
+			if (responseCode != 404) {
+				resp = resp.replaceAll("mid", "idMeasureHistory");
+				resp = resp.replaceAll("created", "timestamp");
+
+				ObjectMapper mapper = new ObjectMapper();
+				HealthMeasureHistory[] hmlist = mapper.readValue(resp,
+						HealthMeasureHistory[].class);
+			}
+			out.println(indentJSON(resp));
+		}
+		if (mids.isEmpty()) {
+			result = "ERROR";
+		} else {
+			result = "OK, there is at least an HealthMeasure record in the hisotry";
+		}
+		out.println("=> Result: " + result);
+		out.close();
+	}
+
+	private static void request8() throws FileNotFoundException {
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+
+		List<PrintStream> streams = new ArrayList<>();
+		streams.add(System.out);
+		FileOutputStream fileWriter = new FileOutputStream("step_3-8.txt");
+		streams.add(new PrintStream(fileWriter));
+		MultiPrintStream out = new MultiPrintStream(streams);
+
+		String url = "";
+		int responseCode = -1;
+		String resp = "";
+		String accept = "";
+		String contentType = "";
+		String result = "";
+		Response response = null;
+
+		List<Integer> midlist = new ArrayList<>();
+		midlist.addAll(mids.keySet());
+		int mid = midlist.get(0);
+		String measuretype = mids.get(mid);
+
+		// step 3.8 Accept XML
+		url = "person/" + first_person_id + "/" + measuretype + "/" + mid;
+		accept = MediaType.APPLICATION_XML;
+		contentType = "";
+		out.println("Request #8: GET " + getBaseURI() + "/" + url + " Accept: "
+				+ accept + " Content-type: " + contentType);
+
+		response = service.path(url).request().accept(accept).get();
+		resp = response.readEntity(String.class);
+		responseCode = response.getStatus();
+		if (responseCode != 404) {
+			result = "OK, HealthMeasure record with id=" + mid + " and type="
+					+ measuretype + " found!";
+		} else {
+			result = "ERROR";
+		}
+		out.println("=> Result: " + result);
+		out.println("=> HTTP Status: " + responseCode);
+		out.println(indentXML(resp));
+
+		// step 3.8 Accept JSON
+		url = "person/" + first_person_id + "/" + measuretype + "/" + mid;
+		accept = MediaType.APPLICATION_JSON;
+		contentType = "";
+		out.println("Request #8: GET " + getBaseURI() + "/" + url + " Accept: "
+				+ accept + " Content-type: " + contentType);
+
+		response = service.path(url).request().accept(accept).get();
+		resp = response.readEntity(String.class);
+		responseCode = response.getStatus();
+		if (responseCode != 404) {
+			result = "OK, HealthMeasure record with id=" + mid + " and type="
+					+ measuretype + " found!";
+		} else {
+			result = "ERROR";
+		}
+		out.println("=> Result: " + result);
+		out.println("=> HTTP Status: " + responseCode);
+		out.println(indentJSON(resp));
+
+		out.close();
+	}
+
+	private static void request9() throws JsonParseException, JsonMappingException, IOException {
+
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+
+		List<PrintStream> streams = new ArrayList<>();
+		streams.add(System.out);
+		FileOutputStream fileWriter = new FileOutputStream("step_3-7.txt");
+		streams.add(new PrintStream(fileWriter));
+		MultiPrintStream out = new MultiPrintStream(streams);
+
+		String url = "";
+		int responseCode = -1;
+		String resp = "";
+		String accept = "";
+		String contentType = "";
+		String result = "";
+		Response response = null;
+		int counterBefore = 0;
+
+		accept = MediaType.APPLICATION_JSON;
+		contentType = "";
+		url = "person/" + first_person_id + "/weight";
+		// out.println("Request #7: GET " + getBaseURI() + "/" + url
+		// + " Accept: " + accept + " Content-type: " + contentType);
+		response = service.path(url).request().accept(accept).get();
+		resp = response.readEntity(String.class);
+		responseCode = response.getStatus();
+		if (responseCode != 404) {
+			resp = resp.replaceAll("mid", "idMeasureHistory");
+			resp = resp.replaceAll("created", "timestamp");
+			ObjectMapper mapper = new ObjectMapper();
+			HealthMeasureHistory[] hmlist = mapper.readValue(resp,HealthMeasureHistory[].class);
+			counterBefore=hmlist.length;
+		}
 		
+		//step 3.9 accept xml
+		accept = MediaType.APPLICATION_JSON;
+		contentType = "";
+		url = "person/" + first_person_id + "/weight";
+		// out.println("Request #7: GET " + getBaseURI() + "/" + url
+		// + " Accept: " + accept + " Content-type: " + contentType);
+		response = service.path(url).request().accept(accept).get();
+		resp = response.readEntity(String.class);
+		responseCode = response.getStatus();
 		
-		
+//		response = service.path("person").request().accept(accept)
+//				.post(Entity.xml(bodyxml));
+
 	}
 
 	private static URI getBaseURI() {
@@ -696,33 +916,44 @@ public class MyClient {
 		// "http://lorebzassignment2.herokuapp.com/sdelab"
 	}
 
-	private static String indentXML(String resp) throws TransformerException,
-			ParserConfigurationException, SAXException, IOException {
-		InputSource is = new InputSource();
-		is.setCharacterStream(new StringReader(resp));
+	private static String indentXML(String resp) {
+		try {
+			InputSource is = new InputSource();
+			is.setCharacterStream(new StringReader(resp));
 
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		Document doc = dBuilder.parse(is);
-		TransformerFactory tf = TransformerFactory.newInstance();
-		Transformer transformer = tf.newTransformer();
-		// transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-		transformer.setOutputProperty(
-				"{http://xml.apache.org/xslt}indent-amount", "4");
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		transformer.transform(new DOMSource(doc), new StreamResult(
-				new OutputStreamWriter(outputStream, "UTF-8")));
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+					.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(is);
+			TransformerFactory tf = TransformerFactory.newInstance();
+			Transformer transformer = tf.newTransformer();
+			// transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
+			// "no");
+			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+			transformer.setOutputProperty(
+					"{http://xml.apache.org/xslt}indent-amount", "4");
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			transformer.transform(new DOMSource(doc), new StreamResult(
+					new OutputStreamWriter(outputStream, "UTF-8")));
 
-		return outputStream.toString();
+			return outputStream.toString();
+		} catch (Exception e) {
+			return resp;
+		}
+
 	}
 
 	private static String indentJSON(String toIndent) {
-		String retval = new GsonBuilder().setPrettyPrinting().create()
-				.toJson(new JsonParser().parse(toIndent));
-		return retval;
+		try {
+			String retval = new GsonBuilder().setPrettyPrinting().create()
+					.toJson(new JsonParser().parse(toIndent));
+			return retval;
+		} catch (Exception e) {
+			return toIndent;
+		}
+
 	}
 
 	private static int countSubStringOccur(String str, String findStr) {
