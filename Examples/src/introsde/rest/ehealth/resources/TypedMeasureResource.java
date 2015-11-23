@@ -47,7 +47,7 @@ public class TypedMeasureResource {
 	// Application integration
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public HealthMeasureHistory getTypedMeasureById() {
+	public Response getTypedMeasureById() {
 		System.out
 				.println("GET person/{personID}/{measureType}/{mid} aka request 7");
 		System.out.println("GET person/" + id + "/" + measureType + "/"
@@ -60,15 +60,16 @@ public class TypedMeasureResource {
 		System.out.println(record.getMeasureDefinition().getMeasureName());
 
 		if (record == null
-				|| !record.getMeasureDefinition().getMeasureName().equals(measureType)) {
-
-			throw new RuntimeException(
-					"Get: HealthMeasureHistory of person with " + id
-							+ " for measuretype of type" + measureType
-							+ " not found");
+				|| !record.getMeasureDefinition().getMeasureName()
+						.equals(measureType)) {
+			return Response
+					.status(404)
+					.entity("Get: HealthMeasureHistory with id=" + measureId
+							+ "and measuretype=" + measureType + " not found")
+					.build();
 
 		} else {
-			return record;
+			return Response.ok(record).build();
 		}
 	}
 

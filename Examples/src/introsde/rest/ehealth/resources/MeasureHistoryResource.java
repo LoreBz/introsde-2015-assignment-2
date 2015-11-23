@@ -20,9 +20,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
+import jersey.repackaged.com.google.common.collect.Lists;
 
 @Stateless
 // only used if the the application is deployed in a Java EE container
@@ -59,7 +63,7 @@ public class MeasureHistoryResource {
 	// Application integration
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<HealthMeasureHistory> getHealthMeasureHistory(
+	public Response getHealthMeasureHistory(
 	/*
 	 * @QueryParam("before") String before,
 	 * 
@@ -124,12 +128,16 @@ public class MeasureHistoryResource {
 		if (!measureHistory.isEmpty()) {
 			System.out.println("we got something");
 		} else {
-			throw new RuntimeException(
-					"Get: HealthMeasureHistory of person with " + id
-							+ " for measuretype of type" + measureType
-							+ " not found");
+			return Response
+					.status(404)
+					.entity("Get: HealthMeasureHistory for person with " + id
+							+ " and measuretype " + measureType + " not found")
+					.build();
 		}
-		return measureHistory;
+		GenericEntity<List<HealthMeasureHistory>> entity = new GenericEntity<List<HealthMeasureHistory>>(
+				Lists.newArrayList(measureHistory)) {};
+		return Response.ok(entity).build();
+
 	}
 
 	private List<HealthMeasureHistory> getHMhistoryByUserAndType(int id2,

@@ -64,7 +64,7 @@ public class MyClient {
 		request4();
 		request5();
 		request6();
-		request7();
+		request7xml();
 	}
 
 	
@@ -653,8 +653,40 @@ public class MyClient {
 
 	}
 	
-	private static void request7() {
-		// TODO Auto-generated method stub
+	private static void request7xml() throws FileNotFoundException {
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+
+		List<PrintStream> streams = new ArrayList<>();
+		streams.add(System.out);
+		FileOutputStream fileWriter = new FileOutputStream("step_3-7xml.txt");
+		streams.add(new PrintStream(fileWriter));
+		MultiPrintStream out = new MultiPrintStream(streams);
+
+		String url = "";
+		int responseCode = -1;
+		String resp = "";
+		String accept = "";
+		String contentType = "";
+		String result = "";
+		Response response = null;
+		
+		// step 3.6 Accept XML
+				accept = MediaType.APPLICATION_XML;
+				contentType = "";
+				for (MeasureDefinition md : measures) {
+					url="person/"+first_person_id+"/"+md.getMeasureName();
+					out.println("Request #6: GET " +getBaseURI()+"/"+ url + " Accept: " + accept
+							+ " Content-type: " + contentType);
+
+					response = service.path(url).request().accept(accept).get();
+					resp = response.readEntity(String.class);
+				}
+				
+				
+		
+		
 		
 	}
 
