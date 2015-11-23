@@ -51,23 +51,26 @@ public class PersonResource {
 	// Application integration
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Person getPerson() {
+	public Response getPerson() {
 		System.out.println("Request #2: GET /person/{id}");
 		Person person = Person.getPersonById(id);
 		if (person == null)
-			throw new RuntimeException("Get: Person with " + id + " not found");
-		return person;
+			return Response.status(404)
+					.entity("Get: Person with " + id + " not found").build();
+		System.out.println("Returning person... " + person.getIdPerson());
+		return Response.ok(person).build();
 	}
 
 	// for the browser
 	@GET
 	@Produces(MediaType.TEXT_XML)
-	public Person getPersonHTML() {
+	public Response getPersonHTML() {
 		Person person = Person.getPersonById(id);
 		if (person == null)
-			throw new RuntimeException("Get: Person with " + id + " not found");
+			return Response.status(404)
+					.entity("Get: Person with " + id + " not found").build();
 		System.out.println("Returning person... " + person.getIdPerson());
-		return person;
+		return Response.ok(person).build();
 	}
 
 	@PUT

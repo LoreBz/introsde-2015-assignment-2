@@ -506,18 +506,29 @@ public class MyClient {
 				.accept(accept).delete();
 		resp = response.readEntity(String.class);
 		
-		out.println("=> Result: " + result);
+		
 		responseCode = response.getStatus();
 		out.println("=> HTTP Status: " + responseCode);
 		
+		if (responseCode==204) {
+			url = getBaseURI() + "/person/" + to_delete_id_xml;
+			accept = "";
+			contentType = "";
+			out.println("Subsequent request: GET " + url + " Accept: " + accept
+					+ " Content-type: " + contentType);
+			response = service.path("person/"+to_delete_id_xml).request().accept(accept).get();
+			resp = response.readEntity(String.class);
+			responseCode = response.getStatus();
+			out.println("=>Subsequent HTTP Status: " + responseCode);
+			if (responseCode==404) {
+				result="OK, person with id"+to_delete_id_xml+" is not present in the db";
+			} else {
+				result="ERROR";
+			}
+			out.println("=> Result: " + result);
+		}
 		
-		url = getBaseURI() + "/person/" + first_person_id;
-		accept = MediaType.APPLICATION_XML;
-		contentType = "";
-		out.println("Request #5: GET " + url + " Accept: " + accept
-				+ " Content-type: " + contentType);
-		response = service.path("person/"+first_person_id).request().accept(accept).get();
-		resp = response.readEntity(String.class);
+		
 
 	}
 
