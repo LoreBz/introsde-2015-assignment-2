@@ -187,7 +187,7 @@ public class MeasureHistoryResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response newLifeStatus(LifeStatus record) throws IOException {
 		// we should create a new Lifestatus and archive the old one
-		System.out.println("POST /person/{id}/{measureType} aka request 8");
+		System.out.println("POST /person/{id}/{measureType} aka request 8!");
 		Person existingPerson = Person.getPersonById(id);
 		if (existingPerson == null) {
 			return Response.status(404).entity("You are trying to post a measure related to a non existing Person!").build();

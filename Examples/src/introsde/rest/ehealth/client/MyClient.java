@@ -1,11 +1,13 @@
 package introsde.rest.ehealth.client;
 
 import introsde.rest.ehealth.model.HealthMeasureHistory;
+import introsde.rest.ehealth.model.LifeStatus;
 import introsde.rest.ehealth.model.MeasureDefinition;
 import introsde.rest.ehealth.model.Person;
 import introsde.rest.ehealth.myutil.MultiPrintStream;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,7 +29,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -49,15 +53,13 @@ import org.xml.sax.SAXException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 
 public class MyClient {
-	static int first_person_id;
-	static int last_person_id;
+	static int first_person_id=1;
+	static int last_person_id=2;
 	static int to_delete_id_xml;
 	static int to_delete_id_json;
 	static ArrayList<MeasureDefinition> measures = new ArrayList<>();
@@ -67,14 +69,14 @@ public class MyClient {
 			SAXException, TransformerException, ParserConfigurationException,
 			XPathExpressionException {
 		System.out.println(getBaseURI());
-		request1();
-		request2();
-		request3();
-		request4();
-		request5();
-		request6();
-		request7();
-		request8();
+//		request1();
+//		request2();
+//		request3();
+//		request4();
+//		request5();
+//		request6();
+//		request7();
+//		request8();
 		request9();
 	}
 
@@ -858,7 +860,8 @@ public class MyClient {
 		out.close();
 	}
 
-	private static void request9() throws JsonParseException, JsonMappingException, IOException {
+	private static void request9() throws JsonParseException,
+			JsonMappingException, IOException, JAXBException {
 
 		ClientConfig clientConfig = new ClientConfig();
 		Client client = ClientBuilder.newClient(clientConfig);
@@ -866,7 +869,7 @@ public class MyClient {
 
 		List<PrintStream> streams = new ArrayList<>();
 		streams.add(System.out);
-		FileOutputStream fileWriter = new FileOutputStream("step_3-7.txt");
+		FileOutputStream fileWriter = new FileOutputStream("step_3-9.txt");
 		streams.add(new PrintStream(fileWriter));
 		MultiPrintStream out = new MultiPrintStream(streams);
 
@@ -891,29 +894,42 @@ public class MyClient {
 			resp = resp.replaceAll("mid", "idMeasureHistory");
 			resp = resp.replaceAll("created", "timestamp");
 			ObjectMapper mapper = new ObjectMapper();
-			HealthMeasureHistory[] hmlist = mapper.readValue(resp,HealthMeasureHistory[].class);
-			counterBefore=hmlist.length;
+			HealthMeasureHistory[] hmlist = mapper.readValue(resp,
+					HealthMeasureHistory[].class);
+			counterBefore = hmlist.length;
 		}
-		
-		//step 3.9 accept xml
-		accept = MediaType.APPLICATION_JSON;
-		contentType = "";
+
+		// step 3.9 accept xml
+		accept = MediaType.APPLICATION_XML;
+		contentType = MediaType.APPLICATION_XML;
 		url = "person/" + first_person_id + "/weight";
-		// out.println("Request #7: GET " + getBaseURI() + "/" + url
-		// + " Accept: " + accept + " Content-type: " + contentType);
-		response = service.path(url).request().accept(accept).get();
+		out.println("Request #9: POST " + getBaseURI() + "/" + url + " Accept: "
+				+ accept + " Content-type: " + contentType);
+
+		LifeStatus lifestatus = new LifeStatus();
+		lifestatus.setValue("1900");
+		JAXBContext jc = JAXBContext.newInstance(LifeStatus.class);
+		Marshaller m = jc.createMarshaller();
+		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		m.marshal(lifestatus, new StreamResult(new OutputStreamWriter(
+				outputStream, "UTF-8")));
+		String bodyxml = outputStream.toString();
+
+		response = service.path("person").request().accept(accept)
+				.post(Entity.xml(bodyxml));
 		resp = response.readEntity(String.class);
 		responseCode = response.getStatus();
-		
-//		response = service.path("person").request().accept(accept)
-//				.post(Entity.xml(bodyxml));
+		out.println("=> Result: " + result);
+		out.println("=> HTTP Status: " + responseCode);
+		out.println(indentXML(resp));
 
 	}
 
 	private static URI getBaseURI() {
 		return UriBuilder.fromUri(
-				"http://lorebzassignment2.herokuapp.com/sdelab").build();
-		// "http://lorebzassignment2.herokuapp.com/sdelab"
+				//"http://lorebzassignment2.herokuapp.com/sdelab").build();
+		 "http://localhost:5700/sdelab").build();
 	}
 
 	private static String indentXML(String resp) {
