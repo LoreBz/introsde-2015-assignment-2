@@ -126,8 +126,8 @@ public class PersonResource {
 
 	@Path("{measureType}")
 	public MeasureHistoryResource getMeasureHistory(
-			@PathParam("measureType") int measureTypeId) {
-		return new MeasureHistoryResource(uriInfo, request, id, measureTypeId);
+			@PathParam("measureType") String measureType) {
+		return new MeasureHistoryResource(uriInfo, request, id, measureType);
 	}
 
 }

@@ -19,28 +19,28 @@ public class TypedMeasureResource {
 	@Context
 	Request request;
 	int id;
-	int measureTypeId;
+	String measureType;
 	int measureId;
 	EntityManager entityManager; // only used if the application is deployed in
 
 	// a Java EE container
 
 	public TypedMeasureResource(UriInfo uriInfo, Request request, int id,
-			int measureTypeId, int measureId, EntityManager em) {
+			String measureType, int measureId, EntityManager em) {
 		this.uriInfo = uriInfo;
 		this.request = request;
 		this.id = id;
-		this.measureTypeId = measureTypeId;
+		this.measureType = measureType;
 		this.measureId = measureId;
 		this.entityManager = em;
 	}
 
 	public TypedMeasureResource(UriInfo uriInfo, Request request, int id,
-			int measureTypeId, int measureId) {
+			String measureType, int measureId) {
 		this.uriInfo = uriInfo;
 		this.request = request;
 		this.id = id;
-		this.measureTypeId = measureTypeId;
+		this.measureType = measureType;
 		this.measureId = measureId;
 	}
 
@@ -50,7 +50,7 @@ public class TypedMeasureResource {
 	public HealthMeasureHistory getTypedMeasureById() {
 		System.out
 				.println("GET person/{personID}/{measureType}/{mid} aka request 7");
-		System.out.println("GET person/" + id + "/" + measureTypeId + "/"
+		System.out.println("GET person/" + id + "/" + measureType + "/"
 				+ measureId + " aka request 7");
 		HealthMeasureHistory record = HealthMeasureHistory
 				.getHealthMeasureHistoryById(measureId);
@@ -60,11 +60,11 @@ public class TypedMeasureResource {
 		System.out.println(record.getMeasureDefinition().getMeasureName());
 
 		if (record == null
-				|| record.getMeasureDefinition().getIdMeasureDef() != measureTypeId) {
+				|| !record.getMeasureDefinition().getMeasureName().equals(measureType)) {
 
 			throw new RuntimeException(
 					"Get: HealthMeasureHistory of person with " + id
-							+ " for measuretype of type" + measureTypeId
+							+ " for measuretype of type" + measureType
 							+ " not found");
 
 		} else {

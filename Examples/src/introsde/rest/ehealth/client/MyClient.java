@@ -1,5 +1,6 @@
 package introsde.rest.ehealth.client;
 
+import introsde.rest.ehealth.model.MeasureDefinition;
 import introsde.rest.ehealth.model.Person;
 import introsde.rest.ehealth.myutil.MultiPrintStream;
 
@@ -12,6 +13,7 @@ import java.io.PrintStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -50,6 +52,7 @@ public class MyClient {
 	static int last_person_id;
 	static int to_delete_id_xml;
 	static int to_delete_id_json;
+	static ArrayList<MeasureDefinition> measures = new ArrayList<>();
 
 	public static void main(String[] args) throws IOException, JAXBException,
 			SAXException, TransformerException, ParserConfigurationException,
@@ -60,7 +63,11 @@ public class MyClient {
 		request3();
 		request4();
 		request5();
+		request6();
+		request7();
 	}
+
+	
 
 	private static void request1() throws ParserConfigurationException,
 			SAXException, IOException, TransformerException {
@@ -152,11 +159,6 @@ public class MyClient {
 		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();
 
 		Person[] navigationArray = gson.fromJson(resp, Person[].class);
-		for (Person p : navigationArray) {
-			System.out.println(p.getName());
-			System.out.println(p.getBirthdate());
-			System.out.println(p.getIdPerson());
-		}
 
 		counterPerson = MyClient.countSubStringOccur(resp, "idPerson");
 		if (counterPerson < 3) {
@@ -199,7 +201,8 @@ public class MyClient {
 		contentType = "";
 		out.println("Request #2: GET " + url + " Accept: " + accept
 				+ " Content-type: " + contentType);
-		response = service.path("person/"+first_person_id).request().accept(accept).get();
+		response = service.path("person/" + first_person_id).request()
+				.accept(accept).get();
 		resp = response.readEntity(String.class);
 
 		responseCode = response.getStatus();
@@ -219,7 +222,8 @@ public class MyClient {
 		contentType = "";
 		out.println("Request #2: GET " + url + " Accept: " + accept
 				+ " Content-type: " + contentType);
-		response = service.path("person/"+first_person_id).request().accept(accept).get();
+		response = service.path("person/" + first_person_id).request()
+				.accept(accept).get();
 		resp = response.readEntity(String.class);
 
 		responseCode = response.getStatus();
@@ -402,8 +406,8 @@ public class MyClient {
 				+ "            </measureDefinition> "
 				+ "            <value>78.9</value> " + "        </lifeStatus> "
 				+ "    </healthProfile> " + "</person> ";
-		response = service.path("person").request()
-				.accept(accept).post(Entity.xml(bodyxml));
+		response = service.path("person").request().accept(accept)
+				.post(Entity.xml(bodyxml));
 		resp = response.readEntity(String.class);
 		responseCode = response.getStatus();
 
@@ -450,8 +454,8 @@ public class MyClient {
 				+ "        \"measureName\": \"weight\" " + "      } "
 				+ "    } " + "  ] " + "} ";
 
-		response = service.path("person").request()
-				.accept(accept).post(Entity.json(bodyj));
+		response = service.path("person").request().accept(accept)
+				.post(Entity.json(bodyj));
 		resp = response.readEntity(String.class);
 
 		resp = resp.replaceAll("firstname", "name");
@@ -495,41 +499,163 @@ public class MyClient {
 		String result = "";
 		Response response = null;
 
-		// step 3.4 Accept XML
-		url = getBaseURI() + "/person/"+to_delete_id_xml;
+		// step 3.5 Accept XML
+		url = getBaseURI() + "/person/" + to_delete_id_xml;
 		accept = "";
 		contentType = "";
 		out.println("Request #5: DELETE " + url + " Accept: " + accept
 				+ " Content-type: " + contentType);
-		
-		response = service.path("person/"+to_delete_id_xml).request()
+
+		response = service.path("person/" + to_delete_id_xml).request()
 				.accept(accept).delete();
 		resp = response.readEntity(String.class);
-		
-		
+
 		responseCode = response.getStatus();
 		out.println("=> HTTP Status: " + responseCode);
-		
-		if (responseCode==204) {
+
+		if (responseCode == 204) {
 			url = getBaseURI() + "/person/" + to_delete_id_xml;
-			accept = "";
+			accept = MediaType.APPLICATION_XML;
 			contentType = "";
 			out.println("Subsequent request: GET " + url + " Accept: " + accept
 					+ " Content-type: " + contentType);
-			response = service.path("person/"+to_delete_id_xml).request().accept(accept).get();
+			response = service.path("person/" + to_delete_id_xml).request()
+					.accept(accept).get();
 			resp = response.readEntity(String.class);
 			responseCode = response.getStatus();
 			out.println("=>Subsequent HTTP Status: " + responseCode);
-			if (responseCode==404) {
-				result="OK, person with id"+to_delete_id_xml+" is not present in the db";
+			if (responseCode == 404) {
+				result = "OK, person with id" + to_delete_id_xml
+						+ " is not present in the db";
 			} else {
-				result="ERROR";
+				result = "ERROR";
 			}
 			out.println("=> Result: " + result);
 		}
-		
-		
 
+		// step 3.5 Accept JSON
+		url = getBaseURI() + "/person/" + to_delete_id_json;
+		accept = "";
+		contentType = "";
+		out.println("Request #5: DELETE " + url + " Accept: " + accept
+				+ " Content-type: " + contentType);
+
+		response = service.path("person/" + to_delete_id_json).request()
+				.accept(accept).delete();
+		resp = response.readEntity(String.class);
+
+		responseCode = response.getStatus();
+		out.println("=> HTTP Status: " + responseCode);
+
+		if (responseCode == 204) {
+			url = getBaseURI() + "/person/" + to_delete_id_json;
+			accept = MediaType.APPLICATION_JSON;
+			contentType = "";
+			out.println("Subsequent request: GET " + url + " Accept: " + accept
+					+ " Content-type: " + contentType);
+			response = service.path("person/" + to_delete_id_json).request()
+					.accept(accept).get();
+			resp = response.readEntity(String.class);
+			responseCode = response.getStatus();
+			out.println("=>Subsequent HTTP Status: " + responseCode);
+			if (responseCode == 404) {
+				result = "OK, person with id" + to_delete_id_json
+						+ " is not present in the db";
+			} else {
+				result = "ERROR";
+			}
+			out.println("=> Result: " + result);
+		}
+
+	}
+
+	private static void request6() throws ParserConfigurationException,
+			SAXException, IOException, TransformerException {
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+
+		List<PrintStream> streams = new ArrayList<>();
+		streams.add(System.out);
+		FileOutputStream fileWriter = new FileOutputStream("step_3-6.txt");
+		streams.add(new PrintStream(fileWriter));
+		MultiPrintStream out = new MultiPrintStream(streams);
+
+		String url = "";
+		int responseCode = -1;
+		String resp = "";
+		String accept = "";
+		String contentType = "";
+		String result = "";
+		Response response = null;
+
+		// step 3.6 Accept XML
+		url = getBaseURI() + "/measureTypes";
+		accept = MediaType.APPLICATION_XML;
+		contentType = "";
+		out.println("Request #6: GET " + url + " Accept: " + accept
+				+ " Content-type: " + contentType);
+
+		response = service.path("measureTypes").request().accept(accept).get();
+		resp = response.readEntity(String.class);
+		InputSource is = new InputSource();
+		is.setCharacterStream(new StringReader(resp));
+
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		Document doc = dBuilder.parse(is);
+
+		NodeList measuretypes = doc.getElementsByTagName("measureDefinition");
+		if (measuretypes.getLength() > 2) {
+			result = "OK, more than 2 measureTypes";
+		} else {
+			result = "ERROR";
+		}
+		// for (int i = 0; i < measuretypes.getLength(); i++) {
+		// Node n = measuretypes.item(i);
+		// Node measurename = n.getFirstChild();
+		// if (measurename.getNodeName().equals("measureName")) {
+		// String measureName=measurename.getTextContent();
+		// MeasureDefinition md=new MeasureDefinition();
+		// md.setMeasureName(measureName);
+		// measures.add(md);
+		// }
+		// }
+		out.println("=> Result: " + result);
+		responseCode = response.getStatus();
+		out.println("=> HTTP Status: " + responseCode);
+		out.println(indentXML(resp));
+
+		// step 3.6 Accept JSON
+		url = getBaseURI() + "/measureTypes";
+		accept = MediaType.APPLICATION_JSON;
+		contentType = "";
+		out.println("Request #6: GET " + url + " Accept: " + accept
+				+ " Content-type: " + contentType);
+
+		response = service.path("measureTypes").request().accept(accept).get();
+		resp = response.readEntity(String.class);
+
+		Gson gson = new Gson();
+		MeasureDefinition[] mdlist = gson.fromJson(resp,
+				MeasureDefinition[].class);
+		measures.clear();
+		measures.addAll(Arrays.asList(mdlist));
+		if (measures.size() > 2) {
+			result = "OK, more than 2 measureTypes";
+		} else {
+			result = "ERROR";
+		}
+		out.println("=> Result: " + result);
+		responseCode = response.getStatus();
+		out.println("=> HTTP Status: " + responseCode);
+		out.println(indentJSON(resp));
+
+	}
+	
+	private static void request7() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private static URI getBaseURI() {

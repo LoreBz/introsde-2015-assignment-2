@@ -34,26 +34,26 @@ public class MeasureHistoryResource {
 	@Context
 	Request request;
 	int id;
-	int measureTypeId;
+	String measureType;
 
 	EntityManager entityManager; // only used if the application is deployed in
 									// a Java EE container
 
 	public MeasureHistoryResource(UriInfo uriInfo, Request request, int id,
-			int measureTypeId, EntityManager em) {
+			String measureType, EntityManager em) {
 		this.uriInfo = uriInfo;
 		this.request = request;
 		this.id = id;
-		this.measureTypeId = measureTypeId;
+		this.measureType = measureType;
 		this.entityManager = em;
 	}
 
 	public MeasureHistoryResource(UriInfo uriInfo, Request request, int id,
-			int measureTypeId) {
+			String measureType) {
 		this.uriInfo = uriInfo;
 		this.request = request;
 		this.id = id;
-		this.measureTypeId = measureTypeId;
+		this.measureType = measureType;
 	}
 
 	// Application integration
@@ -67,7 +67,7 @@ public class MeasureHistoryResource {
 	 */) {
 		System.out.println("Request #6: GET /person/{id}/{measureType}");
 		List<HealthMeasureHistory> measureHistory = this
-				.getHMhistoryByUserAndType(id, measureTypeId);
+				.getHMhistoryByUserAndType(id, measureType);
 		// if (before == null || after == null) {
 		// System.out
 		// .println("GET person/{personID}/{measureType} aka request 6");
@@ -120,22 +120,22 @@ public class MeasureHistoryResource {
 		// return measureHistory;
 		//
 		// }
-		System.out.println("GET person/{personID}/{measureType} aka request 6");
+		// System.out.println("GET person/{personID}/{measureType} aka request 6");
 		if (!measureHistory.isEmpty()) {
 			System.out.println("we got something");
 		} else {
 			throw new RuntimeException(
 					"Get: HealthMeasureHistory of person with " + id
-							+ " for measuretype of type" + measureTypeId
+							+ " for measuretype of type" + measureType
 							+ " not found");
 		}
 		return measureHistory;
 	}
 
 	private List<HealthMeasureHistory> getHMhistoryByUserAndType(int id2,
-			int measureTypeId2) {
+			String measureType) {
 		System.out.println("Reading HMhistory from DB for person with id: "
-				+ id2 + " and measuretype of type=" + measureTypeId2);
+				+ id2 + " and measuretype of type=" + measureType);
 
 		// this will work within a Java EE container, where not DAO will be
 		// needed
@@ -153,9 +153,9 @@ public class MeasureHistoryResource {
 				int idperson = hm.getPerson().getIdPerson();
 				if (id2 == idperson) {
 					if (hm.getMeasureDefinition() != null) {
-						int idmeasured = hm.getMeasureDefinition()
-								.getIdMeasureDef();
-						if (idmeasured == measureTypeId2) {
+						String measurename = hm.getMeasureDefinition()
+								.getMeasureName();
+						if (measurename.equals(measureType)) {
 							retval.add(hm);
 							System.out.println(hm.getPerson().getName()
 									+ " "
@@ -187,10 +187,15 @@ public class MeasureHistoryResource {
 		}
 		System.out.println("personID valid");
 		System.out
-				.println("getting measuredefinition with id=" + measureTypeId);
+				.println("getting measuredefinition with type=" + measureType);
 		MeasureDefinition md = null;
 		try {
-			md = MeasureDefinition.getMeasureDefinitionById(measureTypeId);
+			List<MeasureDefinition> mdlist = MeasureDefinition.getAll();
+			for (MeasureDefinition measureDefinition : mdlist) {
+				if (measureDefinition.getMeasureName().equals(measureType)) {
+					md = measureDefinition;
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("errore nel prendere la measuredef");
@@ -199,7 +204,7 @@ public class MeasureHistoryResource {
 			if (!record.getMeasureDefinition().getMeasureName()
 					.equals(md.getMeasureName())) {
 				System.out.println("You set a path with measuretypeid="
-						+ measureTypeId + " that means=" + md.getMeasureName()
+						+ measureType + " that means=" + md.getMeasureName()
 						+ "\nbut you set in the body a measuredef="
 						+ record.getMeasureDefinition().getMeasureName());
 			}
@@ -248,7 +253,7 @@ public class MeasureHistoryResource {
 	@Path("{mid}")
 	public TypedMeasureResource getTypedMeasureById(
 			@PathParam("mid") int measureId) {
-		return new TypedMeasureResource(uriInfo, request, id, measureTypeId,
+		return new TypedMeasureResource(uriInfo, request, id, measureType,
 				measureId);
 	}
 
