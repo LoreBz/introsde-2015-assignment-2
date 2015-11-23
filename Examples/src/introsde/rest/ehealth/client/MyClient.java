@@ -7,7 +7,6 @@ import introsde.rest.ehealth.model.Person;
 import introsde.rest.ehealth.myutil.MultiPrintStream;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -53,13 +52,15 @@ import org.xml.sax.SAXException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 
 public class MyClient {
-	static int first_person_id=1;
-	static int last_person_id=2;
+	static int first_person_id = 1;
+	static int last_person_id = 2;
 	static int to_delete_id_xml;
 	static int to_delete_id_json;
 	static ArrayList<MeasureDefinition> measures = new ArrayList<>();
@@ -69,14 +70,14 @@ public class MyClient {
 			SAXException, TransformerException, ParserConfigurationException,
 			XPathExpressionException {
 		System.out.println(getBaseURI());
-//		request1();
-//		request2();
-//		request3();
-//		request4();
-//		request5();
-//		request6();
-//		request7();
-//		request8();
+		request1();
+		request2();
+		request3();
+		request4();
+		request5();
+		request6();
+		request7();
+		request8();
 		request9();
 	}
 
@@ -903,11 +904,11 @@ public class MyClient {
 		accept = MediaType.APPLICATION_XML;
 		contentType = MediaType.APPLICATION_XML;
 		url = "person/" + first_person_id + "/weight";
-		out.println("Request #9: POST " + getBaseURI() + "/" + url + " Accept: "
-				+ accept + " Content-type: " + contentType);
+		out.println("Request #9: POST " + getBaseURI() + "/" + url
+				+ " Accept: " + accept + " Content-type: " + contentType);
 
 		LifeStatus lifestatus = new LifeStatus();
-		lifestatus.setValue("1900");
+		lifestatus.setValue("72");
 		JAXBContext jc = JAXBContext.newInstance(LifeStatus.class);
 		Marshaller m = jc.createMarshaller();
 		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -915,11 +916,100 @@ public class MyClient {
 		m.marshal(lifestatus, new StreamResult(new OutputStreamWriter(
 				outputStream, "UTF-8")));
 		String bodyxml = outputStream.toString();
-
-		response = service.path("person").request().accept(accept)
+		response = service.path(url).request().accept(accept)
 				.post(Entity.xml(bodyxml));
 		resp = response.readEntity(String.class);
 		responseCode = response.getStatus();
+
+		// check if one more
+		accept = MediaType.APPLICATION_JSON;
+		contentType = "";
+		url = "person/" + first_person_id + "/weight";
+		// out.println("Request #7: GET " + getBaseURI() + "/" + url
+		// + " Accept: " + accept + " Content-type: " + contentType);
+		response = service.path(url).request().accept(accept).get();
+		String resp2 = response.readEntity(String.class);
+		int responseCode2 = response.getStatus();
+		if (responseCode2 != 404) {
+			resp2 = resp2.replaceAll("mid", "idMeasureHistory");
+			resp2 = resp2.replaceAll("created", "timestamp");
+			ObjectMapper mapper = new ObjectMapper();
+			HealthMeasureHistory[] hmlist = mapper.readValue(resp2,
+					HealthMeasureHistory[].class);
+			int counterAfter = hmlist.length;
+			if (counterAfter == (counterBefore + 1)) {
+				result = "OK, one more record!";
+			} else {
+				result = "ERROR";
+			}
+		}
+
+		out.println("=> Result: " + result);
+		out.println("=> HTTP Status: " + responseCode);
+		out.println(indentXML(resp));
+
+		// JSON
+		accept = MediaType.APPLICATION_JSON;
+		contentType = "";
+		url = "person/" + first_person_id + "/height";
+		// out.println("Request #7: GET " + getBaseURI() + "/" + url
+		// + " Accept: " + accept + " Content-type: " + contentType);
+		response = service.path(url).request().accept(accept).get();
+		resp = response.readEntity(String.class);
+		responseCode = response.getStatus();
+		if (responseCode != 404) {
+			resp = resp.replaceAll("mid", "idMeasureHistory");
+			resp = resp.replaceAll("created", "timestamp");
+			ObjectMapper mapper = new ObjectMapper();
+			HealthMeasureHistory[] hmlist = mapper.readValue(resp,
+					HealthMeasureHistory[].class);
+			counterBefore = hmlist.length;
+		}
+
+		// step 3.9 accept json
+		accept = MediaType.APPLICATION_JSON;
+		contentType = MediaType.APPLICATION_JSON;
+		url = "person/" + first_person_id + "/height";
+		out.println("Request #9: POST " + getBaseURI() + "/" + url
+				+ " Accept: " + accept + " Content-type: " + contentType);
+
+		LifeStatus lifestatusj = new LifeStatus();
+		lifestatusj.setValue("172");
+		ObjectMapper mapperj = new ObjectMapper();
+		JaxbAnnotationModule module = new JaxbAnnotationModule();
+		mapperj.registerModule(module);
+		mapperj.configure(SerializationFeature.INDENT_OUTPUT, true);
+		mapperj.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+		String bodyjson = mapperj.writeValueAsString(lifestatusj);
+
+		response = service.path(url).request().accept(accept)
+				.post(Entity.json(bodyjson));
+		resp = response.readEntity(String.class);
+		responseCode = response.getStatus();
+
+		// check if one more
+		accept = MediaType.APPLICATION_JSON;
+		contentType = "";
+		url = "person/" + first_person_id + "/height";
+		// out.println("Request #7: GET " + getBaseURI() + "/" + url
+		// + " Accept: " + accept + " Content-type: " + contentType);
+		response = service.path(url).request().accept(accept).get();
+		String resp3 = response.readEntity(String.class);
+		int responseCode3 = response.getStatus();
+		if (responseCode3 != 404) {
+			resp3 = resp3.replaceAll("mid", "idMeasureHistory");
+			resp3 = resp3.replaceAll("created", "timestamp");
+			ObjectMapper mapper = new ObjectMapper();
+			HealthMeasureHistory[] hmlist = mapper.readValue(resp3,
+					HealthMeasureHistory[].class);
+			int counterAfter = hmlist.length;
+			if (counterAfter == (counterBefore + 1)) {
+				result = "OK, one more record!";
+			} else {
+				result = "ERROR";
+			}
+		}
+
 		out.println("=> Result: " + result);
 		out.println("=> HTTP Status: " + responseCode);
 		out.println(indentXML(resp));
@@ -928,8 +1018,8 @@ public class MyClient {
 
 	private static URI getBaseURI() {
 		return UriBuilder.fromUri(
-				//"http://lorebzassignment2.herokuapp.com/sdelab").build();
-		 "http://localhost:5700/sdelab").build();
+				"http://lorebzassignment2.herokuapp.com/sdelab").build();
+		// "http://localhost:5700/sdelab").build();
 	}
 
 	private static String indentXML(String resp) {
