@@ -4,6 +4,7 @@ import introsde.rest.ehealth.model.Person;
 import introsde.rest.ehealth.myutil.MultiPrintStream;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -47,6 +48,8 @@ import com.google.gson.JsonParser;
 public class MyClient {
 	static int first_person_id;
 	static int last_person_id;
+	static int to_delete_id_xml;
+	static int to_delete_id_json;
 
 	public static void main(String[] args) throws IOException, JAXBException,
 			SAXException, TransformerException, ParserConfigurationException,
@@ -55,7 +58,8 @@ public class MyClient {
 		request1();
 		request2();
 		request3();
-
+		request4();
+		request5();
 	}
 
 	private static void request1() throws ParserConfigurationException,
@@ -195,7 +199,7 @@ public class MyClient {
 		contentType = "";
 		out.println("Request #2: GET " + url + " Accept: " + accept
 				+ " Content-type: " + contentType);
-		response = service.path("person").request().accept(accept).get();
+		response = service.path("person/"+first_person_id).request().accept(accept).get();
 		resp = response.readEntity(String.class);
 
 		responseCode = response.getStatus();
@@ -215,7 +219,7 @@ public class MyClient {
 		contentType = "";
 		out.println("Request #2: GET " + url + " Accept: " + accept
 				+ " Content-type: " + contentType);
-		response = service.path("person").request().accept(accept).get();
+		response = service.path("person/"+first_person_id).request().accept(accept).get();
 		resp = response.readEntity(String.class);
 
 		responseCode = response.getStatus();
@@ -256,43 +260,56 @@ public class MyClient {
 		// step 3.2 Accept XML
 		url = getBaseURI() + "/person/" + first_person_id;
 		accept = MediaType.APPLICATION_XML;
-		contentType = "";
+		contentType = MediaType.APPLICATION_XML;
 		out.println("Request #3: PUT " + url + " Accept: " + accept
 				+ " Content-type: " + contentType);
 
 		int randomNumberxml = new Random(System.currentTimeMillis())
 				.nextInt(10000);
 		String newNamexml = "newName#" + randomNumberxml;
-		String bodyxml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?> " + 
-				 "<person> " + 
-				 "    <firstname>"+newNamexml+"</firstname> " + 
-				 "    <lastname>Chan</lastname> " + 
-				 "    <birthdate>01/09/1978</birthdate> " + 
-				 "    <healthProfile> " + 
-				 "        <lifeStatus> " + 
-				 "            <measureDefinition> " + 
-				 "                <measureName>weight</measureName> " + 
-				 "            </measureDefinition> " + 
-				 "            <value>62.9</value> " + 
-				 "        </lifeStatus> " + 
-				 "        <lifeStatus> " + 
-				 "            <measureDefinition> " + 
-				 "                <measureName>height</measureName> " + 
-				 "            </measureDefinition> " + 
-				 "            <value>171.5</value> " + 
-				 "        </lifeStatus> " + 
-				 "    </healthProfile> " + 
-				 "</person> ";
-		response = service.path(url).request().accept(accept)
-				.put(Entity.xml(bodyxml));
+		String bodyxml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?> "
+				+ "<person> "
+				+ "    <firstname>"
+				+ newNamexml
+				+ "</firstname> "
+				+ "    <lastname>Duck</lastname> "
+				+ "    <birthdate>01/09/1978</birthdate> "
+				+ "    <healthProfile> "
+				+ "        <lifeStatus> "
+				+ "            <measureDefinition> "
+				+ "                <measureName>weight</measureName> "
+				+ "            </measureDefinition> "
+				+ "            <value>62.9</value> "
+				+ "        </lifeStatus> "
+				+ "        <lifeStatus> "
+				+ "            <measureDefinition> "
+				+ "                <measureName>height</measureName> "
+				+ "            </measureDefinition> "
+				+ "            <value>171.5</value> "
+				+ "        </lifeStatus> "
+				+ "    </healthProfile> "
+				+ "</person> ";
+		response = service.path("person/" + first_person_id).request()
+				.accept(MediaType.APPLICATION_XML).put(Entity.xml(bodyxml));
 		resp = response.readEntity(String.class);
 
-		responseCode = response.getStatus();
-		if (responseCode == 200 || responseCode == 202) {
-			result = "OK, status is fine";
-		} else {
-			result = "ERROR";
+		InputSource is = new InputSource();
+		is.setCharacterStream(new StringReader(resp));
+
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		Document doc = dBuilder.parse(is);
+		NodeList nodes = doc.getElementsByTagName("firstname");
+		// check if name is changed
+		if (nodes.getLength() == 1) {
+			Node node = nodes.item(0);
+			if (node.getTextContent().equals(newNamexml)) {
+				result = "OK, name changed";
+			} else {
+				result = "ERROR";
+			}
 		}
+		responseCode = response.getStatus();
 		out.println("=> Result: " + result);
 		responseCode = response.getStatus();
 		out.println("=> HTTP Status: " + responseCode);
@@ -301,14 +318,14 @@ public class MyClient {
 		// step 3.1 Accept json
 		url = getBaseURI() + "/person/" + first_person_id;
 		accept = MediaType.APPLICATION_JSON;
-		contentType = "";
+		contentType = MediaType.APPLICATION_JSON;
 		out.println("Request #3: PUT " + url + " Accept: " + accept
 				+ " Content-type: " + contentType);
 
 		int randomNumberj = new Random(System.currentTimeMillis())
 				.nextInt(10000);
-		String newNamej = "newName#" + randomNumberj;
-		String bodyj = "{ " + "  \"firstname\": \"" + newNamej + "\", "
+		String newNamejson = "newName#" + randomNumberj;
+		String bodyj = "{ " + "  \"firstname\": \"" + newNamejson + "\", "
 				+ "  \"lastname\": \"Paperino\", "
 				+ "  \"birthdate\": \"01/09/1978\", " + "  \"lifeStatus\": [ "
 				+ "    { " + "      \"value\": \"168.7\", "
@@ -318,13 +335,135 @@ public class MyClient {
 				+ "      \"measureDefinition\": { "
 				+ "        \"measureName\": \"weight\" " + "      } "
 				+ "    } " + "  ] " + "} ";
-		response = service.path(url).request().accept(accept)
-				.put(Entity.json(bodyj));
+
+		response = service.path("person/" + first_person_id).request()
+				.accept(MediaType.APPLICATION_JSON).put(Entity.json(bodyj));
 		resp = response.readEntity(String.class);
 
+		resp = resp.replaceAll("firstname", "name");
+		resp = resp.replaceAll("personID", "idPerson");
+		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();
+		Person person = gson.fromJson(resp, Person.class);
+
+		if (person.getName().equals(newNamejson)) {
+			result = "OK, name changed";
+		} else {
+			result = "ERROR";
+		}
+
 		responseCode = response.getStatus();
-		if (responseCode == 200 || responseCode == 202) {
-			result = "OK, status is fine";
+
+		out.println("=> Result: " + result);
+		responseCode = response.getStatus();
+		out.println("=> HTTP Status: " + responseCode);
+		out.println(indentJSON(resp));
+
+		out.close();
+
+	}
+
+	private static void request4() throws TransformerException,
+			ParserConfigurationException, SAXException, IOException {
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+
+		List<PrintStream> streams = new ArrayList<>();
+		streams.add(System.out);
+		FileOutputStream fileWriter = new FileOutputStream("step_3-4.txt");
+		streams.add(new PrintStream(fileWriter));
+		MultiPrintStream out = new MultiPrintStream(streams);
+
+		String url = "";
+		int responseCode = -1;
+		String resp = "";
+		String accept = "";
+		String contentType = "";
+		String result = "";
+		Response response = null;
+
+		// step 3.4 Accept XML
+		url = getBaseURI() + "/person";
+		accept = MediaType.APPLICATION_XML;
+		contentType = MediaType.APPLICATION_XML;
+		out.println("Request #4: POST " + url + " Accept: " + accept
+				+ " Content-type: " + contentType);
+
+		String bodyxml = "<person> " + "    <firstname>Chuck</firstname> "
+				+ "    <lastname>Norris</lastname> "
+				+ "    <birthdate>01/01/1945</birthdate> "
+				+ "    <healthProfile> " + "        <lifeStatus> "
+				+ "            <measureDefinition> "
+				+ "                <measureName>height</measureName> "
+				+ "            </measureDefinition> "
+				+ "            <value>172</value> " + "        </lifeStatus> "
+				+ "        <lifeStatus> " + "            <measureDefinition> "
+				+ "                <measureName>weight</measureName> "
+				+ "            </measureDefinition> "
+				+ "            <value>78.9</value> " + "        </lifeStatus> "
+				+ "    </healthProfile> " + "</person> ";
+		response = service.path("person").request()
+				.accept(accept).post(Entity.xml(bodyxml));
+		resp = response.readEntity(String.class);
+		responseCode = response.getStatus();
+
+		InputSource is = new InputSource();
+		is.setCharacterStream(new StringReader(resp));
+
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		Document doc = dBuilder.parse(is);
+		NodeList nodes = doc.getElementsByTagName("personID");
+		// check if person is created with and ID
+		if (responseCode == 200 || responseCode == 201 || responseCode == 202) {
+			if (nodes.getLength() == 1) {
+				Node node = nodes.item(0);
+				if (node.getTextContent() != null
+						&& !node.getTextContent().equals("")) {
+					result = "OK, person saved with ID" + node.getTextContent();
+					to_delete_id_xml = Integer.parseInt(node.getTextContent());
+				}
+			}
+		} else {
+			result = "ERROR";
+		}
+		out.println("=> Result: " + result);
+		responseCode = response.getStatus();
+		out.println("=> HTTP Status: " + responseCode);
+		out.println(indentXML(resp));
+
+		// step 3.4 Accept json
+		url = getBaseURI() + "/person";
+		accept = MediaType.APPLICATION_JSON;
+		contentType = MediaType.APPLICATION_JSON;
+		out.println("Request #4: POST " + url + " Accept: " + accept
+				+ " Content-type: " + contentType);
+
+		String bodyj = "{ " + "  \"firstname\": \"" + "Chuck" + "\", "
+				+ "  \"lastname\": \"Norris\", "
+				+ "  \"birthdate\": \"01/01/1945\", " + "  \"lifeStatus\": [ "
+				+ "    { " + "      \"value\": \"172\", "
+				+ "      \"measureDefinition\": { "
+				+ "        \"measureName\": \"height\" " + "      } "
+				+ "    }, " + "    { " + "      \"value\": \"78.9\", "
+				+ "      \"measureDefinition\": { "
+				+ "        \"measureName\": \"weight\" " + "      } "
+				+ "    } " + "  ] " + "} ";
+
+		response = service.path("person").request()
+				.accept(accept).post(Entity.json(bodyj));
+		resp = response.readEntity(String.class);
+
+		resp = resp.replaceAll("firstname", "name");
+		resp = resp.replaceAll("personID", "idPerson");
+		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();
+		Person person = gson.fromJson(resp, Person.class);
+
+		responseCode = response.getStatus();
+
+		if (responseCode == 200 || responseCode == 201 || responseCode == 202) {
+			result = "OK, person saved with ID" + person.getIdPerson();
+			to_delete_id_json = person.getIdPerson();
 		} else {
 			result = "ERROR";
 		}
@@ -337,9 +476,55 @@ public class MyClient {
 
 	}
 
+	private static void request5() throws FileNotFoundException {
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+
+		List<PrintStream> streams = new ArrayList<>();
+		streams.add(System.out);
+		FileOutputStream fileWriter = new FileOutputStream("step_3-5.txt");
+		streams.add(new PrintStream(fileWriter));
+		MultiPrintStream out = new MultiPrintStream(streams);
+
+		String url = "";
+		int responseCode = -1;
+		String resp = "";
+		String accept = "";
+		String contentType = "";
+		String result = "";
+		Response response = null;
+
+		// step 3.4 Accept XML
+		url = getBaseURI() + "/person/"+to_delete_id_xml;
+		accept = "";
+		contentType = "";
+		out.println("Request #5: DELETE " + url + " Accept: " + accept
+				+ " Content-type: " + contentType);
+		
+		response = service.path("person/"+to_delete_id_xml).request()
+				.accept(accept).delete();
+		resp = response.readEntity(String.class);
+		
+		out.println("=> Result: " + result);
+		responseCode = response.getStatus();
+		out.println("=> HTTP Status: " + responseCode);
+		
+		
+		url = getBaseURI() + "/person/" + first_person_id;
+		accept = MediaType.APPLICATION_XML;
+		contentType = "";
+		out.println("Request #5: GET " + url + " Accept: " + accept
+				+ " Content-type: " + contentType);
+		response = service.path("person/"+first_person_id).request().accept(accept).get();
+		resp = response.readEntity(String.class);
+
+	}
+
 	private static URI getBaseURI() {
 		return UriBuilder.fromUri(
 				"http://lorebzassignment2.herokuapp.com/sdelab").build();
+		// "http://lorebzassignment2.herokuapp.com/sdelab"
 	}
 
 	private static String indentXML(String resp) throws TransformerException,

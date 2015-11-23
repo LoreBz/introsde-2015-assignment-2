@@ -18,28 +18,39 @@ public class Test {
 		ClientConfig clientConfig = new ClientConfig();
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
+		Response response;
+		String resp;
+		int responseCode;
+		System.out.println("start");
 
-		// // GET BASEURL/rest/salutation
-		// // Accept: text/plain
-		int randomNumberj = new Random(System.currentTimeMillis())
-				.nextInt(10000);
-		String newNamej = "newName#" + randomNumberj;
-		String bodyj = "{ " + "  \"firstname\": \"" + newNamej + "\", "
-				+ "  \"lastname\": \"Paperino\", "
-				+ "  \"birthdate\": \"01/09/1978\", " + "  \"lifeStatus\": [ "
-				+ "    { " + "      \"value\": \"168.7\", "
-				+ "      \"measureDefinition\": { "
-				+ "        \"measureName\": \"height\" " + "      } "
-				+ "    }, " + "    { " + "      \"value\": \"78.7\", "
-				+ "      \"measureDefinition\": { "
-				+ "        \"measureName\": \"weight\" " + "      } "
-				+ "    } " + "  ] " + "} ";
-		Response response = service.path("person/1").request()
-				.accept(MediaType.TEXT_XML).put(Entity.json(bodyj));
-		String retval = response.readEntity(String.class);
-		System.out.println(retval);
+		String bodyxml = "<person> " + 
+				 "    <firstname>bau</firstname> " + 
+				 "    <lastname>bau</lastname> " + 
+				 "    <birthdate>01/09/1978</birthdate> " + 
+				 "    <healthProfile> " + 
+				 "        <lifeStatus> " + 
+				 "            <measureDefinition> " + 
+				 "                <measureName>height</measureName> " + 
+				 "            </measureDefinition> " + 
+				 "            <value>168.7</value> " + 
+				 "        </lifeStatus> " + 
+				 "        <lifeStatus> " + 
+				 "            <measureDefinition> " + 
+				 "                <measureName>weight</measureName> " + 
+				 "            </measureDefinition> " + 
+				 "            <value>78.7</value> " + 
+				 "        </lifeStatus> " + 
+				 "    </healthProfile> " + 
+				 "</person> ";
+		response = service.path("person").request()
+				.accept(MediaType.APPLICATION_XML).post(Entity.xml(bodyxml));
+		resp = response.readEntity(String.class);
+		responseCode = response.getStatus();
+
+		System.out.println(resp);
 		// // Get plain text
 
+		System.out.println("end");
 	}
 
 	private static URI getBaseURI() {
