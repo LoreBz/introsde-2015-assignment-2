@@ -1,0 +1,17 @@
+Request #8: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1/weight/401 Accept: application/xml Content-type: 
+=> Result: OK, HealthMeasure record with id=401 and type=weight found!
+=> HTTP Status: 200
+<?xml version="1.0" encoding="UTF-8"?><measure>
+    <mid>401</mid>
+    <created>2015-11-22T23:00:00Z</created>
+    <value>1900</value>
+</measure>
+
+Request #8: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1/weight/401 Accept: application/json Content-type: 
+=> Result: OK, HealthMeasure record with id=401 and type=weight found!
+=> HTTP Status: 200
+{
+  "value": "1900",
+  "mid": 401,
+  "created": 1448233200000
+}

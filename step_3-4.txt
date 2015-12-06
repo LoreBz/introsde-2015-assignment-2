@@ -1,0 +1,47 @@
+Request #4: POST http://lorebzassignment2.herokuapp.com/sdelab/person Accept: application/xml Content-type: application/xml
+=> Result: OK, person saved with ID252
+=> HTTP Status: 200
+<?xml version="1.0" encoding="UTF-8"?><person>
+    <personID>252</personID>
+    <firstname>Chuck</firstname>
+    <lastname>Norris</lastname>
+    <birthdate>01/01/1945</birthdate>
+    <healthProfile>
+        <lifeStatus>
+            <measureDefinition>
+                <measureName>height</measureName>
+            </measureDefinition>
+            <value>172</value>
+        </lifeStatus>
+        <lifeStatus>
+            <measureDefinition>
+                <measureName>weight</measureName>
+            </measureDefinition>
+            <value>78.9</value>
+        </lifeStatus>
+    </healthProfile>
+</person>
+
+Request #4: POST http://lorebzassignment2.herokuapp.com/sdelab/person Accept: application/json Content-type: application/json
+=> Result: OK, person saved with ID253
+=> HTTP Status: 200
+{
+  "idPerson": 253,
+  "name": "Chuck",
+  "lastname": "Norris",
+  "birthdate": "01/01/1945",
+  "lifeStatus": [
+    {
+      "value": "172",
+      "measureDefinition": {
+        "measureName": "height"
+      }
+    },
+    {
+      "value": "78.9",
+      "measureDefinition": {
+        "measureName": "weight"
+      }
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+Request #2: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1 Accept: application/xml Content-type: 
+=> Result: OK, status is fine
+=> HTTP Status: 200
+<?xml version="1.0" encoding="UTF-8"?><person>
+    <personID>1</personID>
+    <firstname>Donald</firstname>
+    <lastname>Duck</lastname>
+    <birthdate>31/08/1978</birthdate>
+    <healthProfile>
+        <lifeStatus>
+            <measureDefinition>
+                <measureName>weight</measureName>
+            </measureDefinition>
+            <value>72</value>
+        </lifeStatus>
+        <lifeStatus>
+            <measureDefinition>
+                <measureName>height</measureName>
+            </measureDefinition>
+            <value>172</value>
+        </lifeStatus>
+    </healthProfile>
+</person>
+
+Request #2: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1 Accept: application/json Content-type: 
+=> Result: OK, status is fine
+=> HTTP Status: 200
+{
+  "personID": 1,
+  "firstname": "Donald",
+  "lastname": "Duck",
+  "birthdate": "31/08/1978",
+  "lifeStatus": [
+    {
+      "value": "72",
+      "measureDefinition": {
+        "measureName": "weight"
+      }
+    },
+    {
+      "value": "172",
+      "measureDefinition": {
+        "measureName": "height"
+      }
+    }
+  ]
+}

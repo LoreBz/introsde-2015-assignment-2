@@ -1,0 +1,185 @@
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1/weight Accept: application/xml Content-type: 
+=> HTTP Status: 200
+<?xml version="1.0" encoding="UTF-8"?><healthMeasureHistories>
+    <measure>
+        <mid>158</mid>
+        <created>2015-11-19T23:00:00Z</created>
+        <value>78.7</value>
+    </measure>
+    <measure>
+        <mid>351</mid>
+        <created>2015-11-22T23:00:00Z</created>
+        <value>68.7</value>
+    </measure>
+    <measure>
+        <mid>401</mid>
+        <created>2015-11-22T23:00:00Z</created>
+        <value>1900</value>
+    </measure>
+    <measure>
+        <mid>451</mid>
+        <created>2015-11-22T23:00:00Z</created>
+        <value>1900</value>
+    </measure>
+    <measure>
+        <mid>452</mid>
+        <created>2015-11-22T23:00:00Z</created>
+        <value>72</value>
+    </measure>
+    <measure>
+        <mid>453</mid>
+        <created>2015-11-22T23:00:00Z</created>
+        <value>72</value>
+    </measure>
+    <measure>
+        <mid>454</mid>
+        <created>2015-11-22T23:00:00Z</created>
+        <value>72</value>
+    </measure>
+</healthMeasureHistories>
+
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1/height Accept: application/xml Content-type: 
+=> HTTP Status: 200
+<?xml version="1.0" encoding="UTF-8"?><healthMeasureHistories>
+    <measure>
+        <mid>455</mid>
+        <created>2015-11-22T23:00:00Z</created>
+        <value>172</value>
+    </measure>
+</healthMeasureHistories>
+
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1/steps Accept: application/xml Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 1 and measuretype steps not found
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1/blood pressure Accept: application/xml Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 1 and measuretype blood pressure not found
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1/heart rate Accept: application/xml Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 1 and measuretype heart rate not found
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1/bmi Accept: application/xml Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 1 and measuretype bmi not found
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/202/weight Accept: application/xml Content-type: 
+=> HTTP Status: 200
+<?xml version="1.0" encoding="UTF-8"?><healthMeasureHistories>
+    <measure>
+        <mid>301</mid>
+        <created>2015-11-22T23:00:00Z</created>
+        <value>50.0</value>
+    </measure>
+</healthMeasureHistories>
+
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/202/height Accept: application/xml Content-type: 
+=> HTTP Status: 200
+<?xml version="1.0" encoding="UTF-8"?><healthMeasureHistories>
+    <measure>
+        <mid>302</mid>
+        <created>2015-11-22T23:00:00Z</created>
+        <value>160</value>
+    </measure>
+</healthMeasureHistories>
+
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/202/steps Accept: application/xml Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 202 and measuretype steps not found
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/202/blood pressure Accept: application/xml Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 202 and measuretype blood pressure not found
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/202/heart rate Accept: application/xml Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 202 and measuretype heart rate not found
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/202/bmi Accept: application/xml Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 202 and measuretype bmi not found
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1/weight Accept: application/json Content-type: 
+=> HTTP Status: 200
+[
+  {
+    "value": "78.7",
+    "idMeasureHistory": 158,
+    "timestamp": 1447974000000
+  },
+  {
+    "value": "68.7",
+    "idMeasureHistory": 351,
+    "timestamp": 1448233200000
+  },
+  {
+    "value": "1900",
+    "idMeasureHistory": 401,
+    "timestamp": 1448233200000
+  },
+  {
+    "value": "1900",
+    "idMeasureHistory": 451,
+    "timestamp": 1448233200000
+  },
+  {
+    "value": "72",
+    "idMeasureHistory": 452,
+    "timestamp": 1448233200000
+  },
+  {
+    "value": "72",
+    "idMeasureHistory": 453,
+    "timestamp": 1448233200000
+  },
+  {
+    "value": "72",
+    "idMeasureHistory": 454,
+    "timestamp": 1448233200000
+  }
+]
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1/height Accept: application/json Content-type: 
+=> HTTP Status: 200
+[
+  {
+    "value": "172",
+    "idMeasureHistory": 455,
+    "timestamp": 1448233200000
+  }
+]
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1/steps Accept: application/json Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 1 and measuretype steps not found
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1/blood pressure Accept: application/json Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 1 and measuretype blood pressure not found
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1/heart rate Accept: application/json Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 1 and measuretype heart rate not found
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/1/bmi Accept: application/json Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 1 and measuretype bmi not found
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/202/weight Accept: application/json Content-type: 
+=> HTTP Status: 200
+[
+  {
+    "value": "50.0",
+    "idMeasureHistory": 301,
+    "timestamp": 1448233200000
+  }
+]
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/202/height Accept: application/json Content-type: 
+=> HTTP Status: 200
+[
+  {
+    "value": "160",
+    "idMeasureHistory": 302,
+    "timestamp": 1448233200000
+  }
+]
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/202/steps Accept: application/json Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 202 and measuretype steps not found
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/202/blood pressure Accept: application/json Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 202 and measuretype blood pressure not found
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/202/heart rate Accept: application/json Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 202 and measuretype heart rate not found
+Request #7: GET http://lorebzassignment2.herokuapp.com/sdelab/person/202/bmi Accept: application/json Content-type: 
+=> HTTP Status: 404
+Get: HealthMeasureHistory for person with 202 and measuretype bmi not found
+=> Result: OK, there is at least an HealthMeasure record in the hisotry

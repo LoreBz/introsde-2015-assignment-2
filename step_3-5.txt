@@ -1,0 +1,10 @@
+Request #5: DELETE http://lorebzassignment2.herokuapp.com/sdelab/person/252 Accept:  Content-type: 
+=> HTTP Status: 204
+Subsequent request: GET http://lorebzassignment2.herokuapp.com/sdelab/person/252 Accept: application/xml Content-type: 
+=>Subsequent HTTP Status: 404
+=> Result: OK, person with id252 is not present in the db
+Request #5: DELETE http://lorebzassignment2.herokuapp.com/sdelab/person/253 Accept:  Content-type: 
+=> HTTP Status: 204
+Subsequent request: GET http://lorebzassignment2.herokuapp.com/sdelab/person/253 Accept: application/json Content-type: 
+=>Subsequent HTTP Status: 404
+=> Result: OK, person with id253 is not present in the db

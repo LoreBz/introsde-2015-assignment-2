@@ -1,0 +1,47 @@
+Request #6: GET http://lorebzassignment2.herokuapp.com/sdelab/measureTypes Accept: application/xml Content-type: 
+=> Result: OK, more than 2 measureTypes
+=> HTTP Status: 200
+<?xml version="1.0" encoding="UTF-8"?><measureDefinitions>
+    <measureDefinition>
+        <measureName>weight</measureName>
+    </measureDefinition>
+    <measureDefinition>
+        <measureName>height</measureName>
+    </measureDefinition>
+    <measureDefinition>
+        <measureName>steps</measureName>
+    </measureDefinition>
+    <measureDefinition>
+        <measureName>blood pressure</measureName>
+    </measureDefinition>
+    <measureDefinition>
+        <measureName>heart rate</measureName>
+    </measureDefinition>
+    <measureDefinition>
+        <measureName>bmi</measureName>
+    </measureDefinition>
+</measureDefinitions>
+
+Request #6: GET http://lorebzassignment2.herokuapp.com/sdelab/measureTypes Accept: application/json Content-type: 
+=> Result: OK, more than 2 measureTypes
+=> HTTP Status: 200
+[
+  {
+    "measureName": "weight"
+  },
+  {
+    "measureName": "height"
+  },
+  {
+    "measureName": "steps"
+  },
+  {
+    "measureName": "blood pressure"
+  },
+  {
+    "measureName": "heart rate"
+  },
+  {
+    "measureName": "bmi"
+  }
+]

@@ -1,0 +1,14 @@
+Request #9: POST http://lorebzassignment2.herokuapp.com/sdelab/person/1/weight Accept: application/xml Content-type: application/xml
+=> Result: OK, one more record!
+=> HTTP Status: 200
+<?xml version="1.0" encoding="UTF-8"?><Measure>
+    <measureDefinition>
+        <measureName>weight</measureName>
+    </measureDefinition>
+    <value>72</value>
+</Measure>
+
+Request #9: POST http://lorebzassignment2.herokuapp.com/sdelab/person/1/height Accept: application/json Content-type: application/json
+=> Result: OK, one more record!
+=> HTTP Status: 200
+{"value":"172","measureDefinition":{"measureName":"height"}}

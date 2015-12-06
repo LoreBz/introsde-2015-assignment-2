@@ -1,0 +1,131 @@
+Request #1: GET http://lorebzassignment2.herokuapp.com/sdelab/person Accept: application/xml Content-type: 
+=> Result: OK (#person=3)
+=> HTTP Status: 200
+<?xml version="1.0" encoding="UTF-8"?><people>
+    <person>
+        <personID>1</personID>
+        <firstname>Donald</firstname>
+        <lastname>Duck</lastname>
+        <birthdate>31/08/1978</birthdate>
+        <healthProfile>
+            <lifeStatus>
+                <measureDefinition>
+                    <measureName>weight</measureName>
+                </measureDefinition>
+                <value>72</value>
+            </lifeStatus>
+            <lifeStatus>
+                <measureDefinition>
+                    <measureName>height</measureName>
+                </measureDefinition>
+                <value>172</value>
+            </lifeStatus>
+        </healthProfile>
+    </person>
+    <person>
+        <personID>2</personID>
+        <firstname>Jecky</firstname>
+        <lastname>Chan</lastname>
+        <birthdate>18/09/1978</birthdate>
+        <healthProfile>
+            <lifeStatus>
+                <measureDefinition>
+                    <measureName>height</measureName>
+                </measureDefinition>
+                <value>170.0</value>
+            </lifeStatus>
+            <lifeStatus>
+                <measureDefinition>
+                    <measureName>weight</measureName>
+                </measureDefinition>
+                <value>68.7</value>
+            </lifeStatus>
+        </healthProfile>
+    </person>
+    <person>
+        <personID>202</personID>
+        <firstname>Paolino</firstname>
+        <lastname>Paperino</lastname>
+        <birthdate>31/08/1950</birthdate>
+        <healthProfile>
+            <lifeStatus>
+                <measureDefinition>
+                    <measureName>weight</measureName>
+                </measureDefinition>
+                <value>50.0</value>
+            </lifeStatus>
+            <lifeStatus>
+                <measureDefinition>
+                    <measureName>height</measureName>
+                </measureDefinition>
+                <value>160</value>
+            </lifeStatus>
+        </healthProfile>
+    </person>
+</people>
+
+Request #1: GET http://lorebzassignment2.herokuapp.com/sdelab/person Accept: application/json Content-type: 
+=> Result: OK (#person=3)
+=> HTTP Status: 200
+[
+  {
+    "idPerson": 1,
+    "name": "Donald",
+    "lastname": "Duck",
+    "birthdate": "31/08/1978",
+    "lifeStatus": [
+      {
+        "value": "72",
+        "measureDefinition": {
+          "measureName": "weight"
+        }
+      },
+      {
+        "value": "172",
+        "measureDefinition": {
+          "measureName": "height"
+        }
+      }
+    ]
+  },
+  {
+    "idPerson": 2,
+    "name": "Jecky",
+    "lastname": "Chan",
+    "birthdate": "18/09/1978",
+    "lifeStatus": [
+      {
+        "value": "170.0",
+        "measureDefinition": {
+          "measureName": "height"
+        }
+      },
+      {
+        "value": "68.7",
+        "measureDefinition": {
+          "measureName": "weight"
+        }
+      }
+    ]
+  },
+  {
+    "idPerson": 202,
+    "name": "Paolino",
+    "lastname": "Paperino",
+    "birthdate": "31/08/1950",
+    "lifeStatus": [
+      {
+        "value": "50.0",
+        "measureDefinition": {
+          "measureName": "weight"
+        }
+      },
+      {
+        "value": "160",
+        "measureDefinition": {
+          "measureName": "height"
+        }
+      }
+    ]
+  }
+]

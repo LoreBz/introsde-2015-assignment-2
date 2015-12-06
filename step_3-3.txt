@@ -1,0 +1,47 @@
+Request #3: PUT http://lorebzassignment2.herokuapp.com/sdelab/person/1 Accept: application/xml Content-type: application/xml
+=> Result: OK, name changed
+=> HTTP Status: 200
+<?xml version="1.0" encoding="UTF-8"?><person>
+    <personID>1</personID>
+    <firstname>newName#8805</firstname>
+    <lastname>Duck</lastname>
+    <birthdate>01/09/1978</birthdate>
+    <healthProfile>
+        <lifeStatus>
+            <measureDefinition>
+                <measureName>weight</measureName>
+            </measureDefinition>
+            <value>72</value>
+        </lifeStatus>
+        <lifeStatus>
+            <measureDefinition>
+                <measureName>height</measureName>
+            </measureDefinition>
+            <value>172</value>
+        </lifeStatus>
+    </healthProfile>
+</person>
+
+Request #3: PUT http://lorebzassignment2.herokuapp.com/sdelab/person/1 Accept: application/json Content-type: application/json
+=> Result: OK, name changed
+=> HTTP Status: 200
+{
+  "idPerson": 1,
+  "name": "newName#8153",
+  "lastname": "Paperino",
+  "birthdate": "01/09/1978",
+  "lifeStatus": [
+    {
+      "value": "72",
+      "measureDefinition": {
+        "measureName": "weight"
+      }
+    },
+    {
+      "value": "172",
+      "measureDefinition": {
+        "measureName": "height"
+      }
+    }
+  ]
+}
